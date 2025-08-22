@@ -16,13 +16,14 @@ Sistema de gerenciamento de despesas, com funcionalidades para cadastro e gestã
 - Git/GitHub
 
 🗂️ Estrutura de Pastas
+
 br.com.cdb.controldespesas
-├── controller # Endpoints REST (despesas, categorias)
-├── dto # Objetos de entrada e saída da API
-├── entity # Entidades JPA mapeadas
-├── exception # Classes para tratamento de erros e exceções personalizadas
-├── repository # Interfaces para persistência
-├── service # Lógica de negócio
+├── controller     # Endpoints REST (despesas, categorias)
+├── dto            # Objetos de entrada e saída da API
+├── entity         # Entidades JPA mapeadas
+├── exception      # Classes para tratamento de erros e exceções personalizadas
+├── repository     # Interfaces para persistência
+├── service        # Lógica de negócio
 └── ControleDespesasApplication.java
 
 📌 Regras de Negócio
