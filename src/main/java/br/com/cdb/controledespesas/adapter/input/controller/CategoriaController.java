@@ -1,8 +1,11 @@
 package br.com.cdb.controledespesas.adapter.input.controller;
 
 
+import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
+import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
 import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,14 +23,19 @@ public class CategoriaController {
     @Autowired
     CategoriaUseCase categoriaService;
 
+   @Autowired
+    CategoriaMapper categoriaMapper;
+
     @PostMapping
-    public ResponseEntity<CategoriaEntity> addCategoria(@Valid @RequestBody CategoriaRequest categoriaDTO){
-        CategoriaEntity categoriaSalva = categoriaService.salvarCategoria(categoriaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
+    public ResponseEntity<CategoriaResponse> addCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest){
+        Categoria categoriaSalva = categoriaService.salvarCategoria(categoriaRequest);
+        CategoriaResponse response = categoriaMapper.toResponse(categoriaSalva);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarDespesaUsuario(@PathVariable Long id){
+    public ResponseEntity<?> deletarCategoriaUsuario(@PathVariable Long id){
         categoriaService.deletarCategoria(id);
         return  ResponseEntity.noContent().build();
     }

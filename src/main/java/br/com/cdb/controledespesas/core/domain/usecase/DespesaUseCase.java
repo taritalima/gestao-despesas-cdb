@@ -1,105 +1,86 @@
 package br.com.cdb.controledespesas.core.domain.usecase;
 
+import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
 import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
-import br.com.cdb.controledespesas.adapter.input.request.SomaDespesasRequest;
-import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
-import br.com.cdb.controledespesas.adapter.output.entity.DespesaEntity;
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
-import br.com.cdb.controledespesas.adapter.output.repository.CategoriaRepository;
-import br.com.cdb.controledespesas.adapter.output.repository.DespesaRepository;
-import jakarta.transaction.Transactional;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.core.domain.model.Despesa;
+import br.com.cdb.controledespesas.port.input.CategoriaInputPort;
+import br.com.cdb.controledespesas.port.input.DespesaInputPort;
+import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
+import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class DespesaUseCase {
+public class DespesaUseCase implements DespesaInputPort {
 
     @Autowired
-    private DespesaRepository despesaRepository;
+    private CategoriaInputPort categoriaInputPort;
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    CategoriaOutputPort categoriaOutputPort;
 
-    @Transactional
-    public DespesaEntity salvarDespesa(DespesaRequest despesaRequest) {
+    @Autowired
+    DespesaOutputPort despesaOutputPort;
 
-        CategoriaEntity categoria = categoriaRepository.findById(despesaRequest.getCategoriaId())
+
+    @Autowired
+    DespesaMapper despesaMapper;
+
+    public Despesa salvarDespesa(DespesaRequest despesaRequest) {
+
+        Categoria categoria = categoriaOutputPort.buscarPorId(despesaRequest.getCategoriaId())
                 .orElseThrow(() -> new BusinessRuleException("Categoria não encontrada"));
 
-        DespesaEntity despesa = new DespesaEntity();
-        despesa.setCategoria(categoria);
-        despesa.setDescricao(despesaRequest.getDescricao());
-        despesa.setValor(despesaRequest.getValor());
-        despesa.setPagoEm(despesaRequest.getPagoEm());
-        despesa.setUsuarioId(despesaRequest.getUsuarioId());
+        Despesa despesa = despesaMapper.toDomain(despesaRequest);
+        despesa.setCategoriaId(categoria.getId());
 
-        return despesaRepository.save(despesa);
+        Despesa despesaSalva = despesaOutputPort.salvarDespesa(despesa);
+        return despesaSalva;
     }
 
-    private DespesaRequest converterParaDTO(DespesaEntity despesaEntity) {
-        DespesaRequest dto = new DespesaRequest();
-        dto.setUsuarioId(despesaEntity.getUsuarioId());
-        dto.setCategoriaId(despesaEntity.getCategoria().getId());
-        dto.setDescricao(despesaEntity.getDescricao());
-        dto.setValor(despesaEntity.getValor());
-        dto.setPagoEm(despesaEntity.getPagoEm());
-        dto.setCriadoEm(despesaEntity.getCriadoEm());
-        return dto;
-    }
 
-    public SomaDespesasRequest filtrarDespesas(FiltroDespesasRequest filtroDespesasRequest) {
-        CategoriaEntity categoria = null;
+    public List<Despesa> filtrarDespesas(FiltroDespesasRequest filtroDespesasRequest) {
+        Categoria categoria = null;
         if (filtroDespesasRequest.getCategoriaId() != null) {
-            categoria = categoriaRepository.findById(filtroDespesasRequest.getCategoriaId())
+            categoria = categoriaOutputPort.buscarPorId(filtroDespesasRequest.getCategoriaId())
                     .orElseThrow(() -> new BusinessRuleException("Categoria não encontrada"));
         }
         if (filtroDespesasRequest.getDe() != null && filtroDespesasRequest.getAte() != null
                 && filtroDespesasRequest.getDe().isAfter(filtroDespesasRequest.getAte())) {
             throw new BusinessRuleException("A data de início não pode ser maior que a data final!");
         }
-        List<DespesaEntity> despesaEntity = despesaRepository.findByUsuarioIdAndCategoriaAndPagoEmBetween(
+        return despesaOutputPort.filtrarDespesas(
                 filtroDespesasRequest.getUsuarioId(),
-                categoria,
+                categoria != null ? categoria.getId() : null,
                 filtroDespesasRequest.getDe(),
                 filtroDespesasRequest.getAte()
         );
-
-        List<DespesaRequest> despesasRequest = despesaEntity.stream()
-                .map(this::converterParaDTO)
-                .toList();
-
-        BigDecimal total = despesasRequest.stream()
-                .map(DespesaRequest::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return new SomaDespesasRequest(total,despesasRequest);
-
     }
 
     public void deletarDespesaPorId(Long id, Long usuarioId) {
-        DespesaEntity despesa = despesaRepository.findByIdAndUsuarioId(id, usuarioId).orElseThrow(() ->
-                new BusinessRuleException("Despesa não encontrada para o usuário"));
-        despesaRepository.delete(despesa);
+        despesaOutputPort.buscarPorIdEUsuario(id, usuarioId)
+                .orElseThrow(() -> new BusinessRuleException("Despesa não encontrada para o usuário"));
+
+        despesaOutputPort.deletarDespesaPorId(id, usuarioId);
     }
 
-    @Transactional
-    public DespesaEntity atualizarDespesa(Long id, Long usuarioId, DespesaRequest despesaDTO) {
-        DespesaEntity despesa = despesaRepository.findByIdAndUsuarioId(id, usuarioId).orElseThrow(() ->
-                new BusinessRuleException("Despesa não encontrada para o usuário"));
+    public Despesa atualizarDespesa(Long id, Long usuarioId, DespesaRequest despesaRequest) {
+        Despesa despesaExistente = despesaOutputPort.buscarPorIdEUsuario(id, usuarioId)
+                .orElseThrow(() -> new BusinessRuleException("Despesa não encontrada para o usuário"));
 
-        CategoriaEntity categoria = categoriaRepository.findById(despesaDTO.getCategoriaId())
+        Categoria categoria = categoriaOutputPort.buscarPorId(despesaRequest.getCategoriaId())
                 .orElseThrow(() -> new BusinessRuleException("Categoria não encontrada"));
 
-        despesa.setDescricao(despesaDTO.getDescricao());
-        despesa.setValor(despesaDTO.getValor());
-        despesa.setPagoEm(despesaDTO.getPagoEm());
-        despesa.setCategoria(categoria);
+        despesaExistente.setDescricao(despesaRequest.getDescricao());
+        despesaExistente.setValor(despesaRequest.getValor());
+        despesaExistente.setCategoriaId(categoria.getId());
+        despesaExistente.setPagoEm(despesaRequest.getPagoEm());
 
-        return  despesaRepository.save(despesa);
-
+        return despesaOutputPort.atualizarDespesa(despesaExistente);
     }
 }

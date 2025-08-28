@@ -2,21 +2,55 @@ package br.com.cdb.controledespesas.core.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Despesa {
-    private Long usuarioId;
-    private String categoriaNome;
 
-    public Despesa(Long usuarioId, String categoriaNome, String descricao, BigDecimal valor, LocalDate pagoEm) {
+    private Long id;
+    private Long usuarioId;
+    private Long categoriaId;
+    private LocalDateTime criadoEm;
+    private LocalDate pagoEm;
+    private String descricao;
+    private BigDecimal valor;
+
+    public Despesa() {}
+
+
+    public Despesa(Long id, Long usuarioId, Long categoriaid, String descricao, BigDecimal valor, LocalDate pagoEm, LocalDateTime criadoEm) {
         this.usuarioId = usuarioId;
-        this.categoriaNome = categoriaNome;
+        this.categoriaId = categoriaid;
         this.descricao = descricao;
         this.valor = valor;
         this.pagoEm = pagoEm;
+        this.criadoEm = criadoEm;
+        this.id = id;
     }
 
-    private String descricao;
-    private BigDecimal valor;
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
+    }
+
 
     public Long getUsuarioId() {
         return usuarioId;
@@ -26,13 +60,6 @@ public class Despesa {
         this.usuarioId = usuarioId;
     }
 
-    public String getCategoriaNome() {
-        return categoriaNome;
-    }
-
-    public void setCategoriaNome(String categoriaNome) {
-        this.categoriaNome = categoriaNome;
-    }
 
     public String getDescricao() {
         return descricao;
@@ -57,6 +84,4 @@ public class Despesa {
     public void setPagoEm(LocalDate pagoEm) {
         this.pagoEm = pagoEm;
     }
-
-    private LocalDate pagoEm;
 }
