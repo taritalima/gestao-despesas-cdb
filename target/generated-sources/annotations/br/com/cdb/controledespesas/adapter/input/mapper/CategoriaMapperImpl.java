@@ -1,5 +1,6 @@
 package br.com.cdb.controledespesas.adapter.input.mapper;
 
+import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
 import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
 import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-27T21:53:54-0300",
+    date = "2025-09-03T14:38:37-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.9 (Oracle Corporation)"
 )
 @Component
@@ -57,5 +58,18 @@ public class CategoriaMapperImpl implements CategoriaMapper {
         categoriaEntity.setNome( categoria.getNome() );
 
         return categoriaEntity;
+    }
+
+    @Override
+    public Categoria toDomain(CategoriaRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Categoria categoria = new Categoria();
+
+        categoria.setNome( request.getNome() );
+
+        return categoria;
     }
 }

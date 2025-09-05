@@ -7,6 +7,7 @@ import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
 import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
+import br.com.cdb.controledespesas.infraestructure.CategoriaUseCaseBean;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
-    CategoriaUseCase categoriaService;
 
-   @Autowired
-    CategoriaMapper categoriaMapper;
+   private final CategoriaMapper  categoriaMapper;
+   private final CategoriaUseCaseBean categoriaUseCase;
+
+    public CategoriaController( CategoriaMapper categoriaMapper, CategoriaUseCaseBean categoriaUseCase) {
+        this.categoriaMapper = categoriaMapper;
+        this.categoriaUseCase = categoriaUseCase;
+    }
 
     @PostMapping
-    public ResponseEntity<CategoriaResponse> addCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest){
-        Categoria categoriaSalva = categoriaService.salvarCategoria(categoriaRequest);
+    public ResponseEntity<CategoriaResponse> addCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest) {
+        Categoria categoria = categoriaMapper.toDomain(categoriaRequest);
+        Categoria categoriaSalva = categoriaUseCase.salvarCategoria(categoria);
         CategoriaResponse response = categoriaMapper.toResponse(categoriaSalva);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -36,7 +41,7 @@ public class CategoriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarCategoriaUsuario(@PathVariable Long id){
-        categoriaService.deletarCategoria(id);
+        categoriaUseCase.deletarCategoria(id);
         return  ResponseEntity.noContent().build();
     }
 }

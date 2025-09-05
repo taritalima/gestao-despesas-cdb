@@ -1,66 +1,58 @@
 package br.com.cdb.controledespesas.adapter.input.controller;
 
-
 import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
 import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
-import br.com.cdb.controledespesas.adapter.input.request.SomaDespesasRequest;
 import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
-import br.com.cdb.controledespesas.adapter.output.entity.DespesaEntity;
+import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
 import br.com.cdb.controledespesas.core.domain.model.Despesa;
 import br.com.cdb.controledespesas.core.domain.usecase.DespesaUseCase;
+import br.com.cdb.controledespesas.infraestructure.DespesaUseCaseBean;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 
 @Tag(name = "Despesas", description = "Endpoints para controle de despesas pessoais")
 @RestController
 @RequestMapping("/despesas")
-public class DespesasController {
+public class DespesaController {
 
-    @Autowired
-    private DespesaUseCase despesaUseCase;
-    @Autowired
-    private DespesaMapper despesaMapper;
+    private final DespesaUseCaseBean despesaUseCase;
+    private final  DespesaMapper despesaMapper;
+
+    public DespesaController(DespesaUseCaseBean despesaUseCase, DespesaMapper despesaMapper) {
+        this.despesaUseCase = despesaUseCase;
+        this.despesaMapper = despesaMapper;
+    }
 
     @PostMapping
     public ResponseEntity<DespesaResponse> addDespesa(@Valid @RequestBody DespesaRequest despesaRequest){
-        Despesa despesaSalva = despesaUseCase.salvarDespesa(despesaRequest);
 
+        Despesa despesa = despesaMapper.toDomain(despesaRequest);
+        Despesa despesaSalva = despesaUseCase.salvarDespesa(despesa);
         DespesaResponse response = despesaMapper.toResponse(despesaSalva);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<SomaDespesasRequest> listarDespesasPorData(@Valid FiltroDespesasRequest filtroDespesasRequest) {
-        List<Despesa> despesas = despesaUseCase.filtrarDespesas(filtroDespesasRequest);
+    public ResponseEntity<SomaDespesasResponse> listarDespesasPorData(
+            @Valid FiltroDespesasRequest filtroDespesasRequest) {
 
-        BigDecimal total = despesas.stream()
-                .map(Despesa::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        List<DespesaResponse> despesasResponse = despesas.stream()
-                .map(despesaMapper::toResponse)
-                .toList();
-
-        SomaDespesasRequest response = new SomaDespesasRequest(total, despesasResponse);
+        SomaDespesasResponse response = despesaUseCase.listarDespesasComTotal(filtroDespesasRequest);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/{usuarioId}")
-    public ResponseEntity<Despesa> atualizarDespesa(@PathVariable Long id,
+    public ResponseEntity<DespesaResponse> atualizarDespesa(@PathVariable Long id,
                                                           @PathVariable Long usuarioId,
                                                           @Valid @RequestBody DespesaRequest despesaDTO) {
-        Despesa update = despesaUseCase.atualizarDespesa(id, usuarioId, despesaDTO);
-        return ResponseEntity.ok(update);
+        Despesa updated = despesaUseCase.atualizarDespesa(id, usuarioId, despesaDTO);
+        DespesaResponse response = despesaMapper.toResponse(updated);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}/{usuarioId}")

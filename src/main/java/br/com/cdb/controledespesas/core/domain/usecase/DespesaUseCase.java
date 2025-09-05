@@ -3,44 +3,36 @@ package br.com.cdb.controledespesas.core.domain.usecase;
 import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
 import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
+import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
+import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.core.domain.model.Despesa;
-import br.com.cdb.controledespesas.port.input.CategoriaInputPort;
 import br.com.cdb.controledespesas.port.input.DespesaInputPort;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
 import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@Service
 public class DespesaUseCase implements DespesaInputPort {
 
-    @Autowired
-    private CategoriaInputPort categoriaInputPort;
+    private final CategoriaOutputPort categoriaOutputPort;
+    private final DespesaOutputPort despesaOutputPort;
+    private final DespesaMapper despesaMapper;
 
-    @Autowired
-    CategoriaOutputPort categoriaOutputPort;
+    public DespesaUseCase(CategoriaOutputPort categoriaOutputPort, DespesaOutputPort despesaOutputPort, DespesaMapper despesaMapper) {
+        this.categoriaOutputPort = categoriaOutputPort;
+        this.despesaOutputPort = despesaOutputPort;
+        this.despesaMapper = despesaMapper;
+    }
 
-    @Autowired
-    DespesaOutputPort despesaOutputPort;
-
-
-    @Autowired
-    DespesaMapper despesaMapper;
-
-    public Despesa salvarDespesa(DespesaRequest despesaRequest) {
-
-        Categoria categoria = categoriaOutputPort.buscarPorId(despesaRequest.getCategoriaId())
+    public Despesa salvarDespesa(Despesa despesa) {
+        Categoria categoria = categoriaOutputPort.buscarPorId(despesa.getCategoriaId())
                 .orElseThrow(() -> new BusinessRuleException("Categoria não encontrada"));
 
-        Despesa despesa = despesaMapper.toDomain(despesaRequest);
         despesa.setCategoriaId(categoria.getId());
-
-        Despesa despesaSalva = despesaOutputPort.salvarDespesa(despesa);
-        return despesaSalva;
+        return despesaOutputPort.salvarDespesa(despesa);
     }
 
 
@@ -82,5 +74,19 @@ public class DespesaUseCase implements DespesaInputPort {
         despesaExistente.setPagoEm(despesaRequest.getPagoEm());
 
         return despesaOutputPort.atualizarDespesa(despesaExistente);
+    }
+
+    public SomaDespesasResponse listarDespesasComTotal(FiltroDespesasRequest filtro) {
+        List<Despesa> despesas = filtrarDespesas(filtro);
+
+        BigDecimal total = despesas.stream()
+                .map(Despesa::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        List<DespesaResponse> despesasResponse = despesas.stream()
+                .map(despesaMapper::toResponse)
+                .toList();
+
+        return new SomaDespesasResponse(total, despesasResponse);
     }
 }

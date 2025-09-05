@@ -2,6 +2,7 @@ package br.com.cdb.controledespesas.adapter.output.repository;
 
 import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
 import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
+import br.com.cdb.controledespesas.adapter.output.entity.DespesaEntity;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,27 +13,29 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CategoriaRepositoryImpl implements CategoriaOutputPort {
+public class CategoriaRepository implements CategoriaOutputPort {
+
     private final JdbcTemplate jdbcTemplate;
+    private final CategoriaMapper categoriaMapper;
 
-    @Autowired
-    CategoriaMapper categoriaMapper;
-
-    public CategoriaRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public CategoriaRepository(JdbcTemplate jdbcTemplate, CategoriaMapper categoriaMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.categoriaMapper = categoriaMapper;
     }
 
     @Override
     public Categoria salvarCategoria(Categoria categoria) {
-        String sql = "INSERT INTO categoria (nome) VALUES (?) RETURNING id, nome";
 
-        CategoriaEntity entity = jdbcTemplate.queryForObject(
+        CategoriaEntity entity = categoriaMapper.toEntity(categoria);
+
+        String sql = "INSERT INTO categoria (nome) VALUES (?) RETURNING id, nome";
+        CategoriaEntity savedEntity = jdbcTemplate.queryForObject(
                 sql,
-                new Object[]{categoria.getNome()},
+                new Object[]{entity.getNome()},
                 (rs, rowNum) -> new CategoriaEntity(rs.getLong("id"), rs.getString("nome"))
         );
 
-        return categoriaMapper.toDomain(entity);
+        return categoriaMapper.toDomain(savedEntity);
     }
 
     @Override
