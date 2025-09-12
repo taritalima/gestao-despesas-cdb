@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,25 +31,33 @@ public class CategoriaRepository implements CategoriaOutputPort {
 
         CategoriaEntity entity = categoriaMapper.toEntity(categoria);
 
-        String sql = "INSERT INTO categoria (nome) VALUES (?) RETURNING id, nome";
-        CategoriaEntity savedEntity = jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{entity.getNome()},
-                (rs, rowNum) -> new CategoriaEntity(rs.getLong("id"), rs.getString("nome"))
-        );
+        return jdbcTemplate.execute((Connection connection) -> {
+            String sql = "CALL public.pr_insert_categoria(?, ?, ?)";
 
-        return categoriaMapper.toDomain(savedEntity);
+            try(CallableStatement cs = connection.prepareCall(sql)){
+                cs.setString(1, entity.getNome());
+
+                cs.registerOutParameter(2, Types.BIGINT);
+                cs.registerOutParameter(3, Types.VARCHAR);
+                cs.execute();
+
+
+                entity.setId(cs.getLong(2));
+                entity.setNome(cs.getString(3));
+                return categoriaMapper.toDomain(entity);
+            }
+        });
     }
 
     @Override
     public void deletarCategoria(Long categoriaId){
-        String sql = "DELETE FROM categoria WHERE id = ?";
+        String sql = "CALL public.pr_delete_categoria(?)";
         jdbcTemplate.update(sql,categoriaId);
     }
 
     @Override
     public Optional<Categoria> buscarPorId(Long id) {
-        String sql = "SELECT * FROM categoria WHERE id = ?";
+        String sql = "SELECT * FROM public.fn_buscar_categoria_por_id(?)";
 
         List<Categoria> categorias = jdbcTemplate.query(
                 sql,
@@ -62,7 +73,7 @@ public class CategoriaRepository implements CategoriaOutputPort {
 
     @Override
     public Optional<Categoria> buscarPorName(String nome){
-        String sql = "SELECT * FROM categoria WHERE nome = ?";
+        String sql = "SELECT * FROM public.fn_buscar_categoria_por_nome(?)";
         List<Categoria> categorias = jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new Categoria(
@@ -73,5 +84,18 @@ public class CategoriaRepository implements CategoriaOutputPort {
         );
 
         return categorias.stream().findFirst();
+    }
+
+    @Override
+    public List<Categoria> buscarTodasCategoria(){
+        String sql = "SELECT * FROM public.fn_buscar_todas_categoria()";
+        List<Categoria> categorias = jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new Categoria(
+                        rs.getLong("id"),
+                        rs.getString("nome")
+                )
+        );
+        return categorias;
     }
 }

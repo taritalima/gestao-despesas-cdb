@@ -1,6 +1,5 @@
 package br.com.cdb.controledespesas.infraestructure;
 
-import br.com.cdb.controledespesas.adapter.output.repository.CategoriaRepository;
 import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
 import br.com.cdb.controledespesas.port.output.DespesaOutputPort;

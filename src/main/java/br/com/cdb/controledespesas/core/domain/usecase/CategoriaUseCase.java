@@ -9,6 +9,8 @@ import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class CategoriaUseCase implements CategoriaInputPort{
 
     private final CategoriaOutputPort categoriaOutputPort;
@@ -47,5 +49,26 @@ public class CategoriaUseCase implements CategoriaInputPort{
         }
         categoriaOutputPort.deletarCategoria(categoria.getId());
         log.info("Categoria deletada com sucesso: {} (id={})", categoria.getNome(), categoria.getId());
+    }
+
+    public Categoria buscarCategoriaId(Long id){
+        Categoria categoria = categoriaOutputPort.buscarPorId(id)
+                .orElseThrow(() -> {
+            log.warn("Categoria não encontrada com id : {}",id);
+            return new BusinessRuleException("Categoria não encontrada");
+        });
+        log.info("Categoria encontrada: {} (id={})", categoria.getNome(), categoria.getId());
+        return categoria;
+    }
+
+    public List<Categoria> buscarTodasCategorias(){
+        List<Categoria> categorias = categoriaOutputPort.buscarTodasCategoria();
+        if (categorias.isEmpty()) {
+            log.warn("Nenhuma categoria encontrada.");
+            throw new BusinessRuleException("Não existem categorias cadastradas.");
+        }
+
+        log.info("Foram encontradas {} categorias", categorias.size());
+        return categorias;
     }
 }

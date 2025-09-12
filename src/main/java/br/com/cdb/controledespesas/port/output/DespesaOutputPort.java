@@ -8,10 +8,12 @@ import java.util.Optional;
 
 public interface DespesaOutputPort {
     Despesa salvarDespesa(Despesa despesa);
-    void deletarDespesaPorId(Long id, Long usuarioId);
     Despesa atualizarDespesa(Despesa despesa);
+    void deletarDespesaPorId(Long id, Long usuarioId);
     List<Despesa> filtrarDespesas(Long usuarioId, Long categoriaId, LocalDate de, LocalDate ate);
 
     Optional<Despesa> buscarPorIdEUsuario(Long id, Long usuarioId);
     boolean existsByCategoria(Long categoriaId);
+
+    boolean existsByUsuario(Long usuarioId);
 }

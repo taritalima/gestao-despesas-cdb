@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Tag(name = "Categorias", description = "Endpoints para controle das Categorias")
 @RestController
@@ -43,5 +45,22 @@ public class CategoriaController {
     public ResponseEntity<?> deletarCategoriaUsuario(@PathVariable Long id){
         categoriaUseCase.deletarCategoria(id);
         return  ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaResponse> buscarCategoriaId(@PathVariable Long id) {
+        Categoria categoria = categoriaUseCase.buscarCategoriaId(id);
+        CategoriaResponse response = categoriaMapper.toResponse(categoria);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<CategoriaResponse>> listarTofasCategorias() {
+        List<Categoria> categorias = categoriaUseCase.buscarTodasCategorias();
+        List<CategoriaResponse> response = categorias.stream()
+                .map(categoriaMapper::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }
