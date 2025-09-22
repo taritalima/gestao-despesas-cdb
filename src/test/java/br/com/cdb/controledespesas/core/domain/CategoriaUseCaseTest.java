@@ -84,4 +84,19 @@ public class CategoriaUseCaseTest {
         // THEN
         verify(categoriaOutputPort).deletarCategoria(categoriaTeste.getId());
     }
+
+    @Test
+    @DisplayName("Não deve deletar categoria inexistente")
+    void naoDeveDeletarCategoriaInexistente(){
+        //Given
+        when(categoriaOutputPort.buscarPorId(anyLong())).thenReturn(Optional.empty());
+
+        //when + then
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class () -> categoriaUseCase.deletarCategoria(100L));
+        assertEquals("Categoria não encontrada", exception.getMessage());
+        verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
+    }
+
+    
+
 }
