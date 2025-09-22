@@ -1,4 +1,4 @@
-package br.com.cdb.controledespesas.core.domain.usecase;
+package br.com.cdb.controledespesas.core.domain;
 
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Usuario;

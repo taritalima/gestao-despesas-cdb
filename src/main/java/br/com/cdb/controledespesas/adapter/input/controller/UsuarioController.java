@@ -5,7 +5,7 @@ import br.com.cdb.controledespesas.adapter.input.mapper.UsuarioMapper;
 import br.com.cdb.controledespesas.adapter.input.request.UsuarioRequest;
 import br.com.cdb.controledespesas.adapter.input.response.UsuarioResponse;
 import br.com.cdb.controledespesas.core.domain.model.Usuario;
-import br.com.cdb.controledespesas.core.domain.usecase.UsuarioUseCase;
+import br.com.cdb.controledespesas.core.domain.UsuarioUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
