@@ -92,8 +92,20 @@ public class CategoriaUseCaseTest {
         when(categoriaOutputPort.buscarPorId(anyLong())).thenReturn(Optional.empty());
 
         //when + then
-        BusinessRuleException exception = assertThrows(BusinessRuleException.class () -> categoriaUseCase.deletarCategoria(100L));
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(100L));
         assertEquals("Categoria não encontrada", exception.getMessage());
+        verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
+    }
+
+    @Test
+    @DisplayName("Não deve deletar categoria com despesas vinculadas")
+    void naoDeveDeletarCategoriaComDespesasVinculadas(){
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+        when(despesaOutputPort.existsByCategoria(categoriaTeste.getId())).thenReturn(true);
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(categoriaTeste.getId()));
+
+        assertEquals("Não é possivel remover a categoria, existem despesas vinculadas."), exception.getMessage());
         verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
     }
 
