@@ -70,4 +70,18 @@ public class CategoriaUseCaseTest {
         assertEquals("Já existe Categoria com esse nome!", exception.getMessage());
         verify(categoriaOutputPort, never()).salvarCategoria(any(Categoria.class));
     }
+
+    @Test
+    @DisplayName("Deve deletar categoria com sucesso quando não há despesas vinculadas")
+    void deveDeletarCategoriaComSucesso() {
+        // GIVEN
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+        when(despesaOutputPort.existsByCategoria(categoriaTeste.getId())).thenReturn(false);
+
+        // WHEN
+        categoriaUseCase.deletarCategoria(categoriaTeste.getId());
+
+        // THEN
+        verify(categoriaOutputPort).deletarCategoria(categoriaTeste.getId());
+    }
 }
