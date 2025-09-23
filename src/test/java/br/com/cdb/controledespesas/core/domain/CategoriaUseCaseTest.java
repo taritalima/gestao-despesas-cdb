@@ -151,5 +151,15 @@ public class CategoriaUseCaseTest {
         verify(categoriaOutputPort).buscarTodasCategoria();
     }
 
-    
+    @Test
+    @DisplayName("Não deve listar categorias quando nenhuma for encontrada")
+    void naoDeveListarCategoriasQuandoNaoExistirem() {
+        when(categoriaOutputPort.buscarTodasCategoria()).thenReturn(Collections.emptyList());
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class,
+                () -> categoriaUseCase.buscarTodasCategorias());
+
+        assertEquals("Não existem categorias cadastradas.", exception.getMessage());
+    }
+
 }
