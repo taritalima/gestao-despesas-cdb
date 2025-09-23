@@ -123,6 +123,15 @@ public class CategoriaUseCaseTest {
         verify(categoriaOutputPort).buscarPorId(categoriaTeste.getId());
     }
 
-    
+    @Test
+    @DisplayName("Não deve buscar categoria inexistente por ID")
+    void naoDeveBuscarCategoriaInexistentePorId() {
+        when(categoriaOutputPort.buscarPorId(anyLong())).thenReturn(Optional.empty());
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class,
+                () -> categoriaUseCase.buscarCategoriaId(99L));
+
+        assertEquals("Categoria não encontrada", exception.getMessage());
+    }
 
 }
