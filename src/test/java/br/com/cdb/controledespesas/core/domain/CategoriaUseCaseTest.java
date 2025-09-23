@@ -134,4 +134,22 @@ public class CategoriaUseCaseTest {
         assertEquals("Categoria não encontrada", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Deve listar todas as categorias com sucesso")
+    void deveListarTodasCategorias() {
+        List<Categoria> categoriasEsperadas = Arrays.asList(
+                new Categoria(1L, "Alimentação"),
+                new Categoria(2L, "Transporte")
+        );
+        when(categoriaOutputPort.buscarTodasCategoria()).thenReturn(categoriasEsperadas);
+
+        List<Categoria> categoriasEncontradas = categoriaUseCase.buscarTodasCategorias();
+
+        assertNotNull(categoriasEncontradas);
+        assertEquals(2, categoriasEncontradas.size());
+        assertEquals("Alimentação", categoriasEncontradas.get(0).getNome());
+        verify(categoriaOutputPort).buscarTodasCategoria();
+    }
+
+    
 }
