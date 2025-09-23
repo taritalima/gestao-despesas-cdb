@@ -109,6 +109,20 @@ public class CategoriaUseCaseTest {
         verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
     }
 
+    @Test
+    @DisplayName("Deve buscar categoria por ID com sucesso")
+    void deveBuscarCategoriaPorId() {
+
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+
+        Categoria categoriaEncontrada = categoriaUseCase.buscarCategoriaId(categoriaTeste.getId());
+
+        assertNotNull(categoriaEncontrada);
+        assertEquals(categoriaTeste.getId(), categoriaEncontrada.getId());
+        assertEquals(categoriaTeste.getNome(), categoriaEncontrada.getNome());
+        verify(categoriaOutputPort).buscarPorId(categoriaTeste.getId());
+    }
+
     
 
 }
