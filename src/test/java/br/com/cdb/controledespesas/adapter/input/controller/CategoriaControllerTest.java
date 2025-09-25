@@ -66,5 +66,16 @@ class CategoriaControllerTest {
         assertEquals(1, response.getBody().size());
     }
 
+    @Test
+    void deveBuscarCategoriaPorId() {
+        when(categoriaUseCase.buscarCategoriaId(1L)).thenReturn(categoria);
+        when(categoriaMapper.toResponse(categoria)).thenReturn(categoriaResponse);
+
+        ResponseEntity<CategoriaResponse> response = categoriaController.buscarCategoriaId(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(categoriaResponse, response.getBody());
+    }
+
     
 }
