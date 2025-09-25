@@ -69,5 +69,16 @@ class DespesaControllerTest {
         verify(despesaUseCase, times(1)).salvarDespesa(despesa);
     }
 
+    @Test
+    void deveListarDespesas() {
+        FiltroDespesasRequest filtro = new FiltroDespesasRequest();
+        when(despesaUseCase.listarDespesasComTotal(filtro)).thenReturn(somaDespesasResponse);
+
+        ResponseEntity<SomaDespesasResponse> response = despesaController.listarDespesasPorData(filtro);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(somaDespesasResponse, response.getBody());
+    }
+
     
 }
