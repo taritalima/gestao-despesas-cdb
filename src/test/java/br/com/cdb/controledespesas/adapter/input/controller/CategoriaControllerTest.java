@@ -55,5 +55,16 @@ class CategoriaControllerTest {
         verify(categoriaUseCase, times(1)).salvarCategoria(categoria);
     }
 
+    @Test
+    void deveListarCategorias() {
+        when(categoriaUseCase.buscarTodasCategorias()).thenReturn(List.of(categoria));
+        when(categoriaMapper.toResponse(categoria)).thenReturn(categoriaResponse);
+
+        ResponseEntity<List<CategoriaResponse>> response = categoriaController.listarTofasCategorias();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+    }
+
     
 }
