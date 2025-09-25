@@ -77,5 +77,11 @@ class CategoriaControllerTest {
         assertEquals(categoriaResponse, response.getBody());
     }
 
-    
+    @Test
+    void deveDeletarCategoria() {
+        ResponseEntity<?> response = categoriaController.deletarCategoriaUsuario(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(categoriaUseCase, times(1)).deletarCategoria(1L);
+    }
 }
