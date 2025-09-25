@@ -1,6 +1,6 @@
 package br.com.cdb.controledespesas.infraestructure;
 
-import br.com.cdb.controledespesas.core.domain.CategoriaUseCase;
+import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
 import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
 import org.springframework.stereotype.Service;

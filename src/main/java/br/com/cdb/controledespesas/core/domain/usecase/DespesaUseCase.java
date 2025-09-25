@@ -1,4 +1,4 @@
-package br.com.cdb.controledespesas.core.domain;
+package br.com.cdb.controledespesas.core.domain.usecase;
 
 import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;

@@ -2,6 +2,7 @@ package br.com.cdb.controledespesas.core.domain;
 
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
 import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,7 +109,7 @@ public class CategoriaUseCaseTest {
 
         BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(categoriaTeste.getId()));
 
-        assertEquals("Não é possivel remover a categoria, existem despesas vinculadas."), exception.getMessage());
+        assertEquals("Não é possivel remover a categoria, existem despesas vinculadas.", exception.getMessage());
         verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
     }
 
