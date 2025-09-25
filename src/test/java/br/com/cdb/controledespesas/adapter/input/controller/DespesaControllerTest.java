@@ -91,5 +91,11 @@ class DespesaControllerTest {
         assertEquals(despesaResponse, response.getBody());
     }
 
-    
+    @Test
+    void deveDeletarDespesa() {
+        ResponseEntity<Void> response = despesaController.deletarDespesaUsuario(1L, 1L);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(despesaUseCase, times(1)).deletarDespesaPorId(1L, 1L);
+    }
 }
