@@ -1,4 +1,4 @@
-package br.com.cdb.controledespesas.core.domain;
+package br.com.cdb.controledespesas.core.domain.usecase;
 
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
@@ -21,9 +21,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.Assertions.*;
-import org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaUseCaseTest {
