@@ -80,5 +80,16 @@ class DespesaControllerTest {
         assertEquals(somaDespesasResponse, response.getBody());
     }
 
+    @Test
+    void deveAtualizarDespesa() {
+        when(despesaUseCase.atualizarDespesa(eq(1L), eq(1L), any(DespesaRequest.class))).thenReturn(despesa);
+        when(despesaMapper.toResponse(despesa)).thenReturn(despesaResponse);
+
+        ResponseEntity<DespesaResponse> response = despesaController.atualizarDespesa(1L, 1L, despesaRequest);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(despesaResponse, response.getBody());
+    }
+
     
 }
