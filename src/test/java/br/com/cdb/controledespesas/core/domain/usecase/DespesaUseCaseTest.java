@@ -140,5 +140,16 @@ class DespesaUseCaseTest {
         verify(despesaOutputPort, times(1)).atualizarDespesa(any(Despesa.class));
     }
 
+    @Test
+    void deveListarDespesasComTotal() {
+        when(despesaOutputPort.filtrarDespesas(1L, null, null, null)).thenReturn(List.of(despesa));
+        when(despesaMapper.toResponse(despesa)).thenReturn(new DespesaResponse());
+
+        SomaDespesasResponse resposta = despesaUseCase.listarDespesasComTotal(filtro);
+
+        assertNotNull(resposta);
+        assertEquals(BigDecimal.valueOf(50), resposta.getTotalGasto());
+    }
+
     
 }
