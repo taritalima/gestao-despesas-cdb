@@ -151,5 +151,10 @@ class DespesaUseCaseTest {
         assertEquals(BigDecimal.valueOf(50), resposta.getTotalGasto());
     }
 
-    
+    @Test
+    void deveLancarExcecaoQuandoNaoEncontrarDespesasAoListar() {
+        when(despesaOutputPort.filtrarDespesas(1L, null, null, null)).thenReturn(List.of());
+
+        assertThrows(BusinessRuleException.class, () -> despesaUseCase.listarDespesasComTotal(filtro));
+    }
 }
