@@ -94,5 +94,15 @@ class DespesaUseCaseTest {
         assertThrows(BusinessRuleException.class, () -> despesaUseCase.salvarDespesa(despesa));
     }
 
+    @Test
+    void deveFiltrarDespesas() {
+        when(despesaOutputPort.filtrarDespesas(1L, null, null, null)).thenReturn(List.of(despesa));
+
+        List<Despesa> resultado = despesaUseCase.filtrarDespesas(filtro);
+
+        assertEquals(1, resultado.size());
+        verify(despesaOutputPort, times(1)).filtrarDespesas(1L, null, null, null);
+    }
+
     
 }
