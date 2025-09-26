@@ -87,5 +87,12 @@ class DespesaUseCaseTest {
         verify(despesaOutputPort, times(1)).salvarDespesa(despesa);
     }
 
+    @Test
+    void deveLancarExcecaoQuandoCategoriaNaoExistirAoSalvar() {
+        when(categoriaOutputPort.buscarPorId(1L)).thenReturn(Optional.empty());
+
+        assertThrows(BusinessRuleException.class, () -> despesaUseCase.salvarDespesa(despesa));
+    }
+
     
 }
