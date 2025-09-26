@@ -121,5 +121,12 @@ class DespesaUseCaseTest {
         verify(despesaOutputPort, times(1)).deletarDespesaPorId(1L, 1L);
     }
 
+    @Test
+    void deveLancarExcecaoAoDeletarDespesaNaoEncontrada() {
+        when(despesaOutputPort.buscarPorIdEUsuario(1L, 1L)).thenReturn(Optional.empty());
+
+        assertThrows(BusinessRuleException.class, () -> despesaUseCase.deletarDespesaPorId(1L, 1L));
+    }
+
     
 }
