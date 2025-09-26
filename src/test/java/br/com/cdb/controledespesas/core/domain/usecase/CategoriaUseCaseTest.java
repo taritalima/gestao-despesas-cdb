@@ -106,7 +106,7 @@ public class CategoriaUseCaseTest {
 
         BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(categoriaTeste.getId()));
 
-        assertEquals("Não é possivel remover a categoria, existem despesas vinculadas.", exception.getMessage());
+        assertEquals("Não é possível remover a categoria, existem despesas vinculadas.", exception.getMessage());
         verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
     }
 

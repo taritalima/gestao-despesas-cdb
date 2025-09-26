@@ -40,6 +40,11 @@ class DespesaControllerTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        despesa = new Despesa();
+        despesaRequest = new DespesaRequest();
+
         despesaResponse = new DespesaResponse(
                 1L,
                 10L,
@@ -54,7 +59,6 @@ class DespesaControllerTest {
                 List.of(despesaResponse)
         );
     }
-
 
     @Test
     void deveAdicionarDespesa() {
