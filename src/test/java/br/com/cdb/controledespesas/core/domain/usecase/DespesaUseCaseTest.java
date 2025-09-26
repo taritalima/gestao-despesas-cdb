@@ -104,5 +104,22 @@ class DespesaUseCaseTest {
         verify(despesaOutputPort, times(1)).filtrarDespesas(1L, null, null, null);
     }
 
+    @Test
+    void deveLancarExcecaoQuandoDataInicialMaiorQueFinal() {
+        filtro.setDe(LocalDate.of(2024, 10, 1));
+        filtro.setAte(LocalDate.of(2024, 9, 1));
+
+        assertThrows(BusinessRuleException.class, () -> despesaUseCase.filtrarDespesas(filtro));
+    }
+
+    @Test
+    void deveDeletarDespesaExistente() {
+        when(despesaOutputPort.buscarPorIdEUsuario(1L, 1L)).thenReturn(Optional.of(despesa));
+
+        despesaUseCase.deletarDespesaPorId(1L, 1L);
+
+        verify(despesaOutputPort, times(1)).deletarDespesaPorId(1L, 1L);
+    }
+
     
 }
