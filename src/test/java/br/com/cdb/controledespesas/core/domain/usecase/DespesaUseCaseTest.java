@@ -128,5 +128,17 @@ class DespesaUseCaseTest {
         assertThrows(BusinessRuleException.class, () -> despesaUseCase.deletarDespesaPorId(1L, 1L));
     }
 
+    @Test
+    void deveAtualizarDespesa() {
+        when(despesaOutputPort.buscarPorIdEUsuario(1L, 1L)).thenReturn(Optional.of(despesa));
+        when(categoriaOutputPort.buscarPorId(1L)).thenReturn(Optional.of(categoria));
+        when(despesaOutputPort.atualizarDespesa(any(Despesa.class))).thenReturn(despesa);
+
+        Despesa resultado = despesaUseCase.atualizarDespesa(1L, 1L, despesaRequest);
+
+        assertNotNull(resultado);
+        verify(despesaOutputPort, times(1)).atualizarDespesa(any(Despesa.class));
+    }
+
     
 }
