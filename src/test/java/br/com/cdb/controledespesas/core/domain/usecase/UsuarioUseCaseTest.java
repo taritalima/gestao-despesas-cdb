@@ -47,5 +47,42 @@ class UsuarioUseCaseTest {
         verify(usuarioOutputPort, times(1)).salvarUsuario(usuario);
     }
 
+    @Test
+    void deveDeletarUsuarioSemDespesas() {
+        when(usuarioOutputPort.buscarPorId(1L)).thenReturn(Optional.of(usuario));
+        when(despesaOutputPort.existsByUsuario(1L)).thenReturn(false);
+
+        usuarioUseCase.deletarUsuario(1L);
+
+        verify(usuarioOutputPort, times(1)).deletarUsuario(1L);
+    }
+
+    @Test
+    void naoDeveDeletarUsuarioQuandoNaoExiste() {
+        when(usuarioOutputPort.buscarPorId(1L)).thenReturn(Optional.empty());
+
+        BusinessRuleException exception = assertThrows(
+                BusinessRuleException.class,
+                () -> usuarioUseCase.deletarUsuario(1L)
+        );
+
+        assertEquals("Usuario não encontrada", exception.getMessage());
+        verify(usuarioOutputPort, never()).deletarUsuario(any());
+    }
+
+    @Test
+    void naoDeveDeletarUsuarioQuandoPossuiDespesas() {
+        when(usuarioOutputPort.buscarPorId(1L)).thenReturn(Optional.of(usuario));
+        when(despesaOutputPort.existsByUsuario(1L)).thenReturn(true);
+
+        BusinessRuleException exception = assertThrows(
+                BusinessRuleException.class,
+                () -> usuarioUseCase.deletarUsuario(1L)
+        );
+
+        assertEquals("Não é possível remover o usuario, existem despesas vinculadas.", exception.getMessage());
+        verify(usuarioOutputPort, never()).deletarUsuario(any());
+    }
+
     
 }
