@@ -56,5 +56,20 @@ class UsuarioControllerTest {
         verify(usuarioUseCase, times(1)).salvarUsuario(usuario);
     }
 
+    @Test
+    void deveAlterarUsuario() {
+        usuarioRequest.setId(1L);
 
+        when(usuarioMapper.toDomain(usuarioRequest)).thenReturn(usuario);
+        when(usuarioUseCase.alterarInfoUsuario(usuario)).thenReturn(usuario);
+        when(usuarioMapper.toResponse(usuario)).thenReturn(usuarioResponse);
+
+        ResponseEntity<UsuarioResponse> response = usuarioController.alterarUsuario(1L, usuarioRequest);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(usuarioResponse, response.getBody());
+        verify(usuarioUseCase, times(1)).alterarInfoUsuario(usuario);
+    }
+
+    
 }
