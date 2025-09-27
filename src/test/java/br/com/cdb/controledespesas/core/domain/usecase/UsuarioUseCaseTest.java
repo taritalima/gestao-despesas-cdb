@@ -84,5 +84,28 @@ class UsuarioUseCaseTest {
         verify(usuarioOutputPort, never()).deletarUsuario(any());
     }
 
-    
+    @Test
+    void deveAlterarUsuarioComSucesso() {
+        when(usuarioOutputPort.buscarPorId(1L)).thenReturn(Optional.of(usuario));
+        when(usuarioOutputPort.alterarInfoUsuario(usuario)).thenReturn(usuario);
+
+        Usuario atualizado = usuarioUseCase.alterarInfoUsuario(usuario);
+
+        assertNotNull(atualizado);
+        assertEquals("Pedro", atualizado.getNome());
+        verify(usuarioOutputPort, times(1)).alterarInfoUsuario(usuario);
+    }
+
+    @Test
+    void naoDeveAlterarUsuarioQuandoNaoExiste() {
+        when(usuarioOutputPort.buscarPorId(1L)).thenReturn(Optional.empty());
+
+        BusinessRuleException exception = assertThrows(
+                BusinessRuleException.class,
+                () -> usuarioUseCase.alterarInfoUsuario(usuario)
+        );
+
+        assertEquals("Usuário não encontrado com id: 1", exception.getMessage());
+        verify(usuarioOutputPort, never()).alterarInfoUsuario(any());
+    }
 }
