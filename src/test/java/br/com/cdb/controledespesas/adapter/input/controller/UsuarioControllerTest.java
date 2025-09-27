@@ -71,5 +71,11 @@ class UsuarioControllerTest {
         verify(usuarioUseCase, times(1)).alterarInfoUsuario(usuario);
     }
 
-    
+    @Test
+    void deveDeletarUsuario() {
+        ResponseEntity<?> response = usuarioController.deletarUsuario(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(usuarioUseCase, times(1)).deletarUsuario(1L);
+    }
 }
