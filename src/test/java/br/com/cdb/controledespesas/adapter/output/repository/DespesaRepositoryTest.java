@@ -124,5 +124,23 @@ class DespesaRepositoryTest {
         assertThat(result).isPresent().contains(despesa);
     }
 
-    
+    @Test
+    void deveRetornarVerdadeiroSeCategoriaExiste() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Boolean.class), eq(20L)))
+                .thenReturn(true);
+
+        boolean result = despesaRepository.existsByCategoria(20L);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void deveRetornarFalsoSeUsuarioNaoExiste() {
+        when(jdbcTemplate.queryForObject(anyString(), eq(Boolean.class), eq(10L)))
+                .thenReturn(false);
+
+        boolean result = despesaRepository.existsByUsuario(10L);
+
+        assertThat(result).isFalse();
+    }
 }
