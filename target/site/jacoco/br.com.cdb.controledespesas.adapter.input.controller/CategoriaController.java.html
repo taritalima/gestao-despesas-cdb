@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.input.controller</a> &gt; <span class="el_source">CategoriaController.java</span></div><h1>CategoriaController.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.input.controller;
+
+
+import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
+import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
+import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.infraestructure.CategoriaUseCaseBean;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@Tag(name = &quot;Categorias&quot;, description = &quot;Endpoints para controle das Categorias&quot;)
+@RestController
+@RequestMapping(&quot;/categorias&quot;)
+public class CategoriaController {
+
+
+   private final CategoriaMapper  categoriaMapper;
+   private final CategoriaUseCaseBean categoriaUseCase;
+
+<span class="fc" id="L27">    public CategoriaController( CategoriaMapper categoriaMapper, CategoriaUseCaseBean categoriaUseCase) {</span>
+<span class="fc" id="L28">        this.categoriaMapper = categoriaMapper;</span>
+<span class="fc" id="L29">        this.categoriaUseCase = categoriaUseCase;</span>
+<span class="fc" id="L30">    }</span>
+
+    @PostMapping
+    public ResponseEntity&lt;CategoriaResponse&gt; addCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest) {
+<span class="fc" id="L34">        Categoria categoria = categoriaMapper.toDomain(categoriaRequest);</span>
+<span class="fc" id="L35">        Categoria categoriaSalva = categoriaUseCase.salvarCategoria(categoria);</span>
+<span class="fc" id="L36">        CategoriaResponse response = categoriaMapper.toResponse(categoriaSalva);</span>
+
+<span class="fc" id="L38">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deletarCategoriaUsuario(@PathVariable Long id){
+<span class="fc" id="L43">        categoriaUseCase.deletarCategoria(id);</span>
+<span class="fc" id="L44">        return  ResponseEntity.noContent().build();</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CategoriaResponse&gt; buscarCategoriaId(@PathVariable Long id) {
+<span class="fc" id="L49">        Categoria categoria = categoriaUseCase.buscarCategoriaId(id);</span>
+<span class="fc" id="L50">        CategoriaResponse response = categoriaMapper.toResponse(categoria);</span>
+<span class="fc" id="L51">        return ResponseEntity.ok(response);</span>
+    }
+
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;List&lt;CategoriaResponse&gt;&gt; listarTofasCategorias() {
+<span class="fc" id="L56">        List&lt;Categoria&gt; categorias = categoriaUseCase.buscarTodasCategorias();</span>
+<span class="fc" id="L57">        List&lt;CategoriaResponse&gt; response = categorias.stream()</span>
+<span class="fc" id="L58">                .map(categoriaMapper::toResponse)</span>
+<span class="fc" id="L59">                .toList();</span>
+
+<span class="fc" id="L61">        return ResponseEntity.ok(response);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

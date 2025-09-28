@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.output.repository</a> &gt; <span class="el_source">CategoriaRepository.java</span></div><h1>CategoriaRepository.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.output.repository;
+
+import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
+import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.Types;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class CategoriaRepository implements CategoriaOutputPort {
+
+    private final JdbcTemplate jdbcTemplate;
+    private final CategoriaMapper categoriaMapper;
+
+<span class="fc" id="L22">    public CategoriaRepository(JdbcTemplate jdbcTemplate, CategoriaMapper categoriaMapper) {</span>
+<span class="fc" id="L23">        this.jdbcTemplate = jdbcTemplate;</span>
+<span class="fc" id="L24">        this.categoriaMapper = categoriaMapper;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Override
+    public Categoria salvarCategoria(Categoria categoria) {
+
+<span class="nc" id="L30">        CategoriaEntity entity = categoriaMapper.toEntity(categoria);</span>
+
+<span class="nc" id="L32">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="nc" id="L33">            String sql = &quot;CALL public.pr_insert_categoria(?, ?, ?)&quot;;</span>
+
+<span class="nc" id="L35">            try(CallableStatement cs = connection.prepareCall(sql)){</span>
+<span class="nc" id="L36">                cs.setString(1, entity.getNome());</span>
+
+<span class="nc" id="L38">                cs.registerOutParameter(2, Types.BIGINT);</span>
+<span class="nc" id="L39">                cs.registerOutParameter(3, Types.VARCHAR);</span>
+<span class="nc" id="L40">                cs.execute();</span>
+
+
+<span class="nc" id="L43">                entity.setId(cs.getLong(2));</span>
+<span class="nc" id="L44">                entity.setNome(cs.getString(3));</span>
+<span class="nc" id="L45">                return categoriaMapper.toDomain(entity);</span>
+            }
+        });
+    }
+
+    @Override
+    public void deletarCategoria(Long categoriaId){
+<span class="nc" id="L52">        String sql = &quot;CALL public.pr_delete_categoria(?)&quot;;</span>
+<span class="nc" id="L53">        jdbcTemplate.update(sql,categoriaId);</span>
+<span class="nc" id="L54">    }</span>
+
+    @Override
+    public Optional&lt;Categoria&gt; buscarPorId(Long id) {
+<span class="nc" id="L58">        String sql = &quot;SELECT * FROM public.fn_buscar_categoria_por_id(?)&quot;;</span>
+
+<span class="nc" id="L60">        List&lt;Categoria&gt; categorias = jdbcTemplate.query(</span>
+                sql,
+                new Object[]{id},
+<span class="nc" id="L63">                (rs, rowNum) -&gt; new Categoria(</span>
+<span class="nc" id="L64">                        rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L65">                        rs.getString(&quot;nome&quot;)</span>
+                )
+        );
+
+<span class="nc" id="L69">        return categorias.stream().findFirst();</span>
+    }
+
+    @Override
+    public Optional&lt;Categoria&gt; buscarPorName(String nome){
+<span class="nc" id="L74">        String sql = &quot;SELECT * FROM public.fn_buscar_categoria_por_nome(?)&quot;;</span>
+<span class="nc" id="L75">        List&lt;Categoria&gt; categorias = jdbcTemplate.query(</span>
+                sql,
+<span class="nc" id="L77">                (rs, rowNum) -&gt; new Categoria(</span>
+<span class="nc" id="L78">                        rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L79">                        rs.getString(&quot;nome&quot;)</span>
+                ),
+                nome
+        );
+
+<span class="nc" id="L84">        return categorias.stream().findFirst();</span>
+    }
+
+    @Override
+    public List&lt;Categoria&gt; buscarTodasCategoria(){
+<span class="nc" id="L89">        String sql = &quot;SELECT * FROM public.fn_buscar_todas_categoria()&quot;;</span>
+<span class="nc" id="L90">        List&lt;Categoria&gt; categorias = jdbcTemplate.query(</span>
+                sql,
+<span class="nc" id="L92">                (rs, rowNum) -&gt; new Categoria(</span>
+<span class="nc" id="L93">                        rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L94">                        rs.getString(&quot;nome&quot;)</span>
+                )
+        );
+<span class="nc" id="L97">        return categorias;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
