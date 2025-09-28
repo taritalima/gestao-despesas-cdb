@@ -72,5 +72,36 @@ class DespesaRepositoryTest {
         verify(despesaMapper).toDomain(any(DespesaEntity.class));
     }
 
+    @Test
+    void deveAtualizarDespesa() throws Exception {
+        when(despesaMapper.toEntity(despesa)).thenReturn(entity);
+        when(despesaMapper.toDomain(any(DespesaEntity.class))).thenReturn(despesa);
+
+        when(jdbcTemplate.execute(any(ConnectionCallback.class)))
+                .thenAnswer(invocation -> {
+                    ConnectionCallback<Despesa> callback = invocation.getArgument(0);
+                    Connection connection = mock(Connection.class);
+                    CallableStatement cs = mock(CallableStatement.class);
+
+                    when(connection.prepareCall(anyString())).thenReturn(cs);
+                    when(cs.getTimestamp(7)).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
+
+                    return callback.doInConnection(connection);
+                });
+
+        Despesa result = despesaRepository.atualizarDespesa(despesa);
+
+        assertThat(result).isEqualTo(despesa);
+        verify(despesaMapper).toEntity(despesa);
+        verify(despesaMapper).toDomain(any(DespesaEntity.class));
+    }
+
+    @Test
+    void deveDeletarDespesa() {
+        despesaRepository.deletarDespesaPorId(1L, 10L);
+
+        verify(jdbcTemplate).update(anyString(), eq(1L), eq(10L));
+    }
+
     
 }
