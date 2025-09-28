@@ -98,7 +98,13 @@ class CategoriaRepositoryTest {
         assertEquals("Bebidas", result.get(1).getNome());
     }
 
+    @Test
+    void testDeletarCategoria() {
+        when(jdbcTemplate.update(anyString(), anyLong())).thenReturn(1);
 
+        categoriaRepository.deletarCategoria(1L);
 
+        verify(jdbcTemplate, times(1)).update(anyString(), eq(1L));
+    }
 
 }
