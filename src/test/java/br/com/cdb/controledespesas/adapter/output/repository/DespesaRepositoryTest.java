@@ -103,5 +103,26 @@ class DespesaRepositoryTest {
         verify(jdbcTemplate).update(anyString(), eq(1L), eq(10L));
     }
 
+    @Test
+    void deveFiltrarDespesas() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), any(), any(), any(), any()))
+                .thenReturn(List.of(entity));
+        when(despesaMapper.toDomain(entity)).thenReturn(despesa);
+
+        List<Despesa> result = despesaRepository.filtrarDespesas(10L, 20L, LocalDate.now(), LocalDate.now());
+
+        assertThat(result).containsExactly(despesa);
+    }
+
+    @Test
+    void deveBuscarPorIdEUsuario() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), any(), any()))
+                .thenReturn(List.of(despesa));
+
+        Optional<Despesa> result = despesaRepository.buscarPorIdEUsuario(1L, 10L);
+
+        assertThat(result).isPresent().contains(despesa);
+    }
+
     
 }
