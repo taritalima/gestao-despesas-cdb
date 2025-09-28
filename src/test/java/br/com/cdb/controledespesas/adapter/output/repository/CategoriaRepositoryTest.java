@@ -56,5 +56,49 @@ class CategoriaRepositoryTest {
         verify(categoriaMapper).toDomain(any(CategoriaEntity.class));
     }
 
+    @Test
+    void testBuscarPorId() {
+        when(jdbcTemplate.query(anyString(), any(Object[].class), any(RowMapper.class)))
+                .thenReturn(List.of(new Categoria(1L, "Categoria2")));
+
+        Optional<Categoria> result = categoriaRepository.buscarPorId(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals("Categoria2", result.get().getNome());
+    }
+
+    @Test
+    void testBuscarPorName() {
+        Categoria categoriaEsperada = new Categoria(1L, "Lanches");
+
+        when(jdbcTemplate.query(
+                eq("SELECT * FROM public.fn_buscar_categoria_por_nome(?)"),
+                any(RowMapper.class),
+                eq("Lanches")
+        )).thenReturn(List.of(categoriaEsperada));
+
+        Optional<Categoria> resultado = categoriaRepository.buscarPorName("Lanches");
+
+        assertTrue(resultado.isPresent());
+        assertEquals("Lanches", resultado.get().getNome());
+    }
+
+
+    @Test
+    void testBuscarTodasCategoria() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class)))
+                .thenReturn(List.of(
+                        new Categoria(1L, "Categoria2"),
+                        new Categoria(2L, "Bebidas")
+                ));
+
+        List<Categoria> result = categoriaRepository.buscarTodasCategoria();
+
+        assertEquals(2, result.size());
+        assertEquals("Bebidas", result.get(1).getNome());
+    }
+
+
+
 
 }
