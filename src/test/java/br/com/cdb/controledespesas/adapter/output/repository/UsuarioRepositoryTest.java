@@ -66,7 +66,12 @@ class UsuarioRepositoryTest {
         verify(usuarioMapper).toDomain(any(UsuarioEntity.class));
     }
 
-    
+    @Test
+    void deveDeletarUsuario() {
+        usuarioRepository.deletarUsuario(1L);
+
+        verify(jdbcTemplate).update(anyString(), eq(1L));
+    }
 
 
 }
