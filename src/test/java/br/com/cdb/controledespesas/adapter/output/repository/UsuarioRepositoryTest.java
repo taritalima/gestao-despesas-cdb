@@ -73,5 +73,25 @@ class UsuarioRepositoryTest {
         verify(jdbcTemplate).update(anyString(), eq(1L));
     }
 
+    @Test
+    void deveBuscarPorIdERetornarUsuario() {
+        when(jdbcTemplate.query(anyString(), any(Object[].class), ArgumentMatchers.<org.springframework.jdbc.core.RowMapper<Usuario>>any()))
+                .thenReturn(List.of(usuario));
 
+        Optional<Usuario> result = usuarioRepository.buscarPorId(1L);
+
+        assertThat(result).isPresent().contains(usuario);
+    }
+
+    @Test
+    void deveBuscarPorIdRetornarVazioSeNaoEncontrado() {
+        when(jdbcTemplate.query(anyString(), any(Object[].class), ArgumentMatchers.<org.springframework.jdbc.core.RowMapper<Usuario>>any()))
+                .thenReturn(List.of());
+
+        Optional<Usuario> result = usuarioRepository.buscarPorId(1L);
+
+        assertThat(result).isEmpty();
+    }
+
+   
 }
