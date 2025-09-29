@@ -93,5 +93,27 @@ class UsuarioRepositoryTest {
         assertThat(result).isEmpty();
     }
 
-   
+    @Test
+    void deveAlterarInfoUsuario() throws Exception {
+        when(usuarioMapper.toEntity(usuario)).thenReturn(entity);
+        when(usuarioMapper.toDomain(any(UsuarioEntity.class))).thenReturn(usuario);
+
+        when(jdbcTemplate.execute(any(ConnectionCallback.class)))
+                .thenAnswer(invocation -> {
+                    ConnectionCallback<Usuario> callback = invocation.getArgument(0);
+                    Connection connection = mock(Connection.class);
+                    CallableStatement cs = mock(CallableStatement.class);
+
+                    when(connection.prepareCall(anyString())).thenReturn(cs);
+                    when(cs.getString(3)).thenReturn("Amanda Atualizada");
+
+                    return callback.doInConnection(connection);
+                });
+
+        Usuario result = usuarioRepository.alterarInfoUsuario(usuario);
+
+        assertThat(result).isEqualTo(usuario);
+        verify(usuarioMapper).toEntity(usuario);
+        verify(usuarioMapper).toDomain(any(UsuarioEntity.class));
+    }
 }
