@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
-    date = &quot;2025-09-30T20:10:34-0300&quot;,
+    date = &quot;2025-10-01T18:02:40-0300&quot;,
     comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)&quot;
 )
 @Component
@@ -17,60 +17,60 @@ import org.springframework.stereotype.Component;
 
     @Override
     public CategoriaResponse toResponse(Categoria categoria) {
-<span class="nc bnc" id="L20" title="All 2 branches missed.">        if ( categoria == null ) {</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if ( categoria == null ) {</span>
 <span class="nc" id="L21">            return null;</span>
         }
 
-<span class="nc" id="L24">        Long id = null;</span>
-<span class="nc" id="L25">        String nome = null;</span>
+<span class="fc" id="L24">        Long id = null;</span>
+<span class="fc" id="L25">        String nome = null;</span>
 
-<span class="nc" id="L27">        id = categoria.getId();</span>
-<span class="nc" id="L28">        nome = categoria.getNome();</span>
+<span class="fc" id="L27">        id = categoria.getId();</span>
+<span class="fc" id="L28">        nome = categoria.getNome();</span>
 
-<span class="nc" id="L30">        CategoriaResponse categoriaResponse = new CategoriaResponse( id, nome );</span>
+<span class="fc" id="L30">        CategoriaResponse categoriaResponse = new CategoriaResponse( id, nome );</span>
 
-<span class="nc" id="L32">        return categoriaResponse;</span>
+<span class="fc" id="L32">        return categoriaResponse;</span>
     }
 
     @Override
     public Categoria toDomain(CategoriaEntity entity) {
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        if ( entity == null ) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if ( entity == null ) {</span>
 <span class="nc" id="L38">            return null;</span>
         }
 
-<span class="nc" id="L41">        Categoria categoria = new Categoria();</span>
+<span class="fc" id="L41">        Categoria categoria = new Categoria();</span>
 
-<span class="nc" id="L43">        categoria.setId( entity.getId() );</span>
-<span class="nc" id="L44">        categoria.setNome( entity.getNome() );</span>
+<span class="fc" id="L43">        categoria.setId( entity.getId() );</span>
+<span class="fc" id="L44">        categoria.setNome( entity.getNome() );</span>
 
-<span class="nc" id="L46">        return categoria;</span>
+<span class="fc" id="L46">        return categoria;</span>
     }
 
     @Override
     public CategoriaEntity toEntity(Categoria categoria) {
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if ( categoria == null ) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if ( categoria == null ) {</span>
 <span class="nc" id="L52">            return null;</span>
         }
 
-<span class="nc" id="L55">        CategoriaEntity categoriaEntity = new CategoriaEntity();</span>
+<span class="fc" id="L55">        CategoriaEntity categoriaEntity = new CategoriaEntity();</span>
 
-<span class="nc" id="L57">        categoriaEntity.setId( categoria.getId() );</span>
-<span class="nc" id="L58">        categoriaEntity.setNome( categoria.getNome() );</span>
+<span class="fc" id="L57">        categoriaEntity.setId( categoria.getId() );</span>
+<span class="fc" id="L58">        categoriaEntity.setNome( categoria.getNome() );</span>
 
-<span class="nc" id="L60">        return categoriaEntity;</span>
+<span class="fc" id="L60">        return categoriaEntity;</span>
     }
 
     @Override
     public Categoria toDomain(CategoriaRequest request) {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if ( request == null ) {</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if ( request == null ) {</span>
 <span class="nc" id="L66">            return null;</span>
         }
 
-<span class="nc" id="L69">        Categoria categoria = new Categoria();</span>
+<span class="fc" id="L69">        Categoria categoria = new Categoria();</span>
 
-<span class="nc" id="L71">        categoria.setNome( request.getNome() );</span>
+<span class="fc" id="L71">        categoria.setNome( request.getNome() );</span>
 
-<span class="nc" id="L73">        return categoria;</span>
+<span class="fc" id="L73">        return categoria;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

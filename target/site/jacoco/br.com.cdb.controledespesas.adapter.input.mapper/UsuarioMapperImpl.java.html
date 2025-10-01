@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
-    date = &quot;2025-09-30T20:10:33-0300&quot;,
+    date = &quot;2025-10-01T18:02:41-0300&quot;,
     comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)&quot;
 )
 @Component
@@ -17,61 +17,61 @@ import org.springframework.stereotype.Component;
 
     @Override
     public UsuarioResponse toResponse(Usuario usuario) {
-<span class="nc bnc" id="L20" title="All 2 branches missed.">        if ( usuario == null ) {</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if ( usuario == null ) {</span>
 <span class="nc" id="L21">            return null;</span>
         }
 
-<span class="nc" id="L24">        Long id = null;</span>
-<span class="nc" id="L25">        String nome = null;</span>
+<span class="fc" id="L24">        Long id = null;</span>
+<span class="fc" id="L25">        String nome = null;</span>
 
-<span class="nc" id="L27">        id = usuario.getId();</span>
-<span class="nc" id="L28">        nome = usuario.getNome();</span>
+<span class="fc" id="L27">        id = usuario.getId();</span>
+<span class="fc" id="L28">        nome = usuario.getNome();</span>
 
-<span class="nc" id="L30">        UsuarioResponse usuarioResponse = new UsuarioResponse( id, nome );</span>
+<span class="fc" id="L30">        UsuarioResponse usuarioResponse = new UsuarioResponse( id, nome );</span>
 
-<span class="nc" id="L32">        return usuarioResponse;</span>
+<span class="fc" id="L32">        return usuarioResponse;</span>
     }
 
     @Override
     public Usuario toDomain(UsuarioEntity entity) {
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        if ( entity == null ) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if ( entity == null ) {</span>
 <span class="nc" id="L38">            return null;</span>
         }
 
-<span class="nc" id="L41">        Usuario usuario = new Usuario();</span>
+<span class="fc" id="L41">        Usuario usuario = new Usuario();</span>
 
-<span class="nc" id="L43">        usuario.setId( entity.getId() );</span>
-<span class="nc" id="L44">        usuario.setNome( entity.getNome() );</span>
+<span class="fc" id="L43">        usuario.setId( entity.getId() );</span>
+<span class="fc" id="L44">        usuario.setNome( entity.getNome() );</span>
 
-<span class="nc" id="L46">        return usuario;</span>
+<span class="fc" id="L46">        return usuario;</span>
     }
 
     @Override
     public UsuarioEntity toEntity(Usuario usuario) {
-<span class="nc bnc" id="L51" title="All 2 branches missed.">        if ( usuario == null ) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if ( usuario == null ) {</span>
 <span class="nc" id="L52">            return null;</span>
         }
 
-<span class="nc" id="L55">        UsuarioEntity usuarioEntity = new UsuarioEntity();</span>
+<span class="fc" id="L55">        UsuarioEntity usuarioEntity = new UsuarioEntity();</span>
 
-<span class="nc" id="L57">        usuarioEntity.setId( usuario.getId() );</span>
-<span class="nc" id="L58">        usuarioEntity.setNome( usuario.getNome() );</span>
+<span class="fc" id="L57">        usuarioEntity.setId( usuario.getId() );</span>
+<span class="fc" id="L58">        usuarioEntity.setNome( usuario.getNome() );</span>
 
-<span class="nc" id="L60">        return usuarioEntity;</span>
+<span class="fc" id="L60">        return usuarioEntity;</span>
     }
 
     @Override
     public Usuario toDomain(UsuarioRequest request) {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if ( request == null ) {</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if ( request == null ) {</span>
 <span class="nc" id="L66">            return null;</span>
         }
 
-<span class="nc" id="L69">        Usuario usuario = new Usuario();</span>
+<span class="fc" id="L69">        Usuario usuario = new Usuario();</span>
 
-<span class="nc" id="L71">        usuario.setId( request.getId() );</span>
-<span class="nc" id="L72">        usuario.setNome( request.getNome() );</span>
+<span class="fc" id="L71">        usuario.setId( request.getId() );</span>
+<span class="fc" id="L72">        usuario.setNome( request.getNome() );</span>
 
-<span class="nc" id="L74">        return usuario;</span>
+<span class="fc" id="L74">        return usuario;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

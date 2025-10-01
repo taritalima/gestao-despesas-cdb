@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: br.com.cdb.controledespesas.adapter.input.controller.DespesaControllerTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.009 s -- in br.com.cdb.controledespesas.adapter.input.controller.DespesaControllerTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.468 s -- in br.com.cdb.controledespesas.adapter.input.controller.DespesaControllerTest

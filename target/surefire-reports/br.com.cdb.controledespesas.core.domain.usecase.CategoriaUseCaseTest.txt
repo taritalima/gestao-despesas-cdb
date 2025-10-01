@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCaseTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.758 s -- in br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCaseTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.622 s -- in br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCaseTest
