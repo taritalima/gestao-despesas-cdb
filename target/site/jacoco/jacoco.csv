@@ -10,9 +10,9 @@ controle-despesas,br.com.cdb.controledespesas.adapter.input.response,SomaDespesa
 controle-despesas,br.com.cdb.controledespesas.adapter.input.response,ErroResponse,43,0,0,0,6,0,9,0,9,0
 controle-despesas,br.com.cdb.controledespesas.adapter.input.response,CategoriaResponse,14,9,0,0,3,1,4,1,4,1
 controle-despesas,br.com.cdb.controledespesas.adapter.input.response,UsuarioResponse,14,9,0,0,3,1,4,1,4,1
-controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,UsuarioRepository,145,9,0,0,30,4,7,1,7,1
-controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,DespesaRepository,338,9,4,0,66,4,13,1,11,1
-controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,CategoriaRepository,146,9,0,0,32,4,9,1,9,1
+controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,UsuarioRepository,11,143,0,0,3,31,1,7,1,7
+controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,DespesaRepository,62,285,2,2,16,54,4,10,2,10
+controle-despesas,br.com.cdb.controledespesas.adapter.output.repository,CategoriaRepository,73,82,0,0,18,18,4,6,4,6
 controle-despesas,br.com.cdb.controledespesas.adapter.input.controller,UsuarioController,0,57,0,0,0,15,0,4,0,4
 controle-despesas,br.com.cdb.controledespesas.adapter.input.controller,CategoriaController,0,67,0,0,0,18,0,5,0,5
 controle-despesas,br.com.cdb.controledespesas.adapter.input.controller,DespesaController,0,63,0,0,0,16,0,5,0,5
@@ -24,9 +24,9 @@ controle-despesas,br.com.cdb.controledespesas.adapter.input.request,FiltroDespes
 controle-despesas,br.com.cdb.controledespesas.adapter.input.request,CategoriaRequest,3,7,0,0,1,2,1,2,1,2
 controle-despesas,br.com.cdb.controledespesas.adapter.input.request,UsuarioRequest,6,11,0,0,2,2,2,3,2,3
 controle-despesas,br.com.cdb.controledespesas.adapter.input.request,DespesaRequest,26,40,0,0,2,7,7,7,7,7
-controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,UsuarioEntity,26,0,0,0,5,0,6,0,6,0
-controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,CategoriaEntity,26,0,0,0,5,0,6,0,6,0
-controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,DespesaEntity,76,0,0,0,10,0,16,0,16,0
+controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,UsuarioEntity,3,23,0,0,1,4,1,5,1,5
+controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,CategoriaEntity,17,9,0,0,4,1,5,1,5,1
+controle-despesas,br.com.cdb.controledespesas.adapter.output.entity,DespesaEntity,26,50,0,0,2,8,7,9,7,9
 controle-despesas,br.com.cdb.controledespesas.infraestructure,UsuarioUseCaseBean,0,5,0,0,0,2,0,1,0,1
 controle-despesas,br.com.cdb.controledespesas.infraestructure,DespesaUseCaseBean,0,6,0,0,0,2,0,1,0,1
 controle-despesas,br.com.cdb.controledespesas.infraestructure,CategoriaUseCaseBean,0,5,0,0,0,2,0,1,0,1

@@ -26,73 +26,73 @@ public class DespesaRepository implements DespesaOutputPort {
 
     @Override
     public Despesa salvarDespesa(Despesa despesa) {
-<span class="nc" id="L29">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
+<span class="fc" id="L29">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
 
-<span class="nc" id="L31">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
-<span class="nc" id="L32">            String sql = &quot;CALL pr_insert_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
-<span class="nc" id="L33">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
+<span class="fc" id="L31">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L32">            String sql = &quot;CALL pr_insert_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="fc" id="L33">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
 
-<span class="nc" id="L35">                cs.setLong(1, entity.getUsuarioId());</span>
-<span class="nc" id="L36">                cs.setString(2, entity.getDescricao());</span>
-<span class="nc" id="L37">                cs.setBigDecimal(3, entity.getValor());</span>
-<span class="nc" id="L38">                cs.setLong(4, entity.getCategoriaId());</span>
-<span class="nc" id="L39">                cs.setDate(5, java.sql.Date.valueOf(entity.getPagoEm()));</span>
+<span class="fc" id="L35">                cs.setLong(1, entity.getUsuarioId());</span>
+<span class="fc" id="L36">                cs.setString(2, entity.getDescricao());</span>
+<span class="fc" id="L37">                cs.setBigDecimal(3, entity.getValor());</span>
+<span class="fc" id="L38">                cs.setLong(4, entity.getCategoriaId());</span>
+<span class="fc" id="L39">                cs.setDate(5, java.sql.Date.valueOf(entity.getPagoEm()));</span>
 
 
-<span class="nc" id="L42">                cs.registerOutParameter(6, Types.BIGINT);</span>
-<span class="nc" id="L43">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
+<span class="fc" id="L42">                cs.registerOutParameter(6, Types.BIGINT);</span>
+<span class="fc" id="L43">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
 
-<span class="nc" id="L45">                cs.execute();</span>
+<span class="fc" id="L45">                cs.execute();</span>
 
-<span class="nc" id="L47">                entity.setId(cs.getLong(6));</span>
-<span class="nc" id="L48">                entity.setCriadoEm(cs.getTimestamp(7).toLocalDateTime());</span>
+<span class="fc" id="L47">                entity.setId(cs.getLong(6));</span>
+<span class="fc" id="L48">                entity.setCriadoEm(cs.getTimestamp(7).toLocalDateTime());</span>
 
-<span class="nc" id="L50">                return despesaMapper.toDomain(entity);</span>
+<span class="fc" id="L50">                return despesaMapper.toDomain(entity);</span>
             }
         });
     }
 
     @Override
     public Despesa atualizarDespesa(Despesa despesa){
-<span class="nc" id="L57">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
+<span class="fc" id="L57">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
 
-<span class="nc" id="L59">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
-<span class="nc" id="L60">            String sql = &quot;CALL public.pr_update_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="fc" id="L59">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L60">            String sql = &quot;CALL public.pr_update_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
 
-<span class="nc" id="L62">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
-<span class="nc" id="L63">                cs.setLong(1, entity.getId());</span>
-<span class="nc" id="L64">                cs.setLong(2, entity.getUsuarioId());</span>
-<span class="nc" id="L65">                cs.setString(3, entity.getDescricao());</span>
-<span class="nc" id="L66">                cs.setBigDecimal(4, entity.getValor());</span>
-<span class="nc" id="L67">                cs.setLong(5, entity.getCategoriaId());</span>
-<span class="nc" id="L68">                cs.setDate(6, java.sql.Date.valueOf(entity.getPagoEm()));</span>
+<span class="fc" id="L62">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
+<span class="fc" id="L63">                cs.setLong(1, entity.getId());</span>
+<span class="fc" id="L64">                cs.setLong(2, entity.getUsuarioId());</span>
+<span class="fc" id="L65">                cs.setString(3, entity.getDescricao());</span>
+<span class="fc" id="L66">                cs.setBigDecimal(4, entity.getValor());</span>
+<span class="fc" id="L67">                cs.setLong(5, entity.getCategoriaId());</span>
+<span class="fc" id="L68">                cs.setDate(6, java.sql.Date.valueOf(entity.getPagoEm()));</span>
 
-<span class="nc" id="L70">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
+<span class="fc" id="L70">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
 
-<span class="nc" id="L72">                cs.execute();</span>
+<span class="fc" id="L72">                cs.execute();</span>
 
-<span class="nc" id="L74">                Timestamp criadoEm = cs.getTimestamp(7);</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (criadoEm != null) {</span>
-<span class="nc" id="L76">                    entity.setCriadoEm(criadoEm.toLocalDateTime());</span>
+<span class="fc" id="L74">                Timestamp criadoEm = cs.getTimestamp(7);</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                if (criadoEm != null) {</span>
+<span class="fc" id="L76">                    entity.setCriadoEm(criadoEm.toLocalDateTime());</span>
                 }
 
-<span class="nc" id="L79">                return despesaMapper.toDomain(entity);</span>
+<span class="fc" id="L79">                return despesaMapper.toDomain(entity);</span>
             }
         });
 }
 
     @Override
     public void deletarDespesaPorId(Long id, Long usuarioId){
-<span class="nc" id="L86">        String sql = &quot;CALL public.pr_delete_despesa(?, ?)&quot;;</span>
-<span class="nc" id="L87">        jdbcTemplate.update(sql, id, usuarioId);</span>
-<span class="nc" id="L88">    }</span>
+<span class="fc" id="L86">        String sql = &quot;CALL public.pr_delete_despesa(?, ?)&quot;;</span>
+<span class="fc" id="L87">        jdbcTemplate.update(sql, id, usuarioId);</span>
+<span class="fc" id="L88">    }</span>
 
     @Override
     public List&lt;Despesa&gt; filtrarDespesas(Long usuarioId, Long categoriaId, LocalDate de, LocalDate ate) {
 
-<span class="nc" id="L93">        String sql = &quot;SELECT * FROM public.fn_filtrar_despesas(?, ?, ?, ?)&quot;;</span>
+<span class="fc" id="L93">        String sql = &quot;SELECT * FROM public.fn_filtrar_despesas(?, ?, ?, ?)&quot;;</span>
 
-<span class="nc" id="L95">        List&lt;DespesaEntity&gt; resultados = jdbcTemplate.query(</span>
+<span class="fc" id="L95">        List&lt;DespesaEntity&gt; resultados = jdbcTemplate.query(</span>
 <span class="nc" id="L96">                sql, (rs, rowNum) -&gt; new DespesaEntity(</span>
 <span class="nc" id="L97">                        rs.getLong(&quot;id&quot;),</span>
 <span class="nc" id="L98">                        rs.getLong(&quot;categoria_id&quot;),</span>
@@ -104,20 +104,20 @@ public class DespesaRepository implements DespesaOutputPort {
                 ),
                 usuarioId,
                 categoriaId,
-<span class="nc" id="L107">                java.sql.Date.valueOf(de),</span>
-<span class="nc" id="L108">                java.sql.Date.valueOf(ate)</span>
+<span class="fc" id="L107">                java.sql.Date.valueOf(de),</span>
+<span class="fc" id="L108">                java.sql.Date.valueOf(ate)</span>
         );
 
-<span class="nc" id="L111">        return resultados.stream()</span>
-<span class="nc" id="L112">                .map(despesaMapper::toDomain)</span>
-<span class="nc" id="L113">                .toList();</span>
+<span class="fc" id="L111">        return resultados.stream()</span>
+<span class="fc" id="L112">                .map(despesaMapper::toDomain)</span>
+<span class="fc" id="L113">                .toList();</span>
     }
 
     @Override
     public Optional&lt;Despesa&gt; buscarPorIdEUsuario(Long id, Long usuarioId) {
-<span class="nc" id="L118">        String sql = &quot;SELECT * FROM public.buscar_despesa_por_id_usuario(?, ?)&quot;;</span>
+<span class="fc" id="L118">        String sql = &quot;SELECT * FROM public.buscar_despesa_por_id_usuario(?, ?)&quot;;</span>
 
-<span class="nc" id="L120">        List&lt;Despesa&gt; resultados = jdbcTemplate.query(</span>
+<span class="fc" id="L120">        List&lt;Despesa&gt; resultados = jdbcTemplate.query(</span>
                 sql,
 <span class="nc" id="L122">                (rs, rowNum) -&gt; new Despesa(</span>
 <span class="nc" id="L123">                        rs.getLong(&quot;id&quot;),</span>
@@ -131,34 +131,34 @@ public class DespesaRepository implements DespesaOutputPort {
                 id, usuarioId
         );
 
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));</span>
     }
 
 
     @Override
     public boolean existsByCategoria(Long categoriaId){
-<span class="nc" id="L140">        String sql = &quot;SELECT public.fn_exists_categoria(?)&quot;;</span>
+<span class="fc" id="L140">        String sql = &quot;SELECT public.fn_exists_categoria(?)&quot;;</span>
 
-<span class="nc" id="L142">        Boolean exists = jdbcTemplate.queryForObject(</span>
+<span class="fc" id="L142">        Boolean exists = jdbcTemplate.queryForObject(</span>
                 sql,
                 Boolean.class,
                 categoriaId
         );
 
-<span class="nc" id="L148">        return Boolean.TRUE.equals(exists);</span>
+<span class="fc" id="L148">        return Boolean.TRUE.equals(exists);</span>
     }
 
     @Override
     public boolean existsByUsuario(Long usuarioId){
-<span class="nc" id="L153">        String sql = &quot;SELECT public.fn_exists_usuario(?)&quot;;</span>
+<span class="fc" id="L153">        String sql = &quot;SELECT public.fn_exists_usuario(?)&quot;;</span>
 
-<span class="nc" id="L155">        Boolean exists = jdbcTemplate.queryForObject(</span>
+<span class="fc" id="L155">        Boolean exists = jdbcTemplate.queryForObject(</span>
                 sql,
                 Boolean.class,
                 usuarioId
         );
 
-<span class="nc" id="L161">        return Boolean.TRUE.equals(exists);</span>
+<span class="fc" id="L161">        return Boolean.TRUE.equals(exists);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

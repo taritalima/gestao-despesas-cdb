@@ -27,36 +27,36 @@ public class UsuarioRepository  implements UsuarioOutputPort {
     @Override
     public Usuario salvarUsuario(Usuario usuario) {
 
-<span class="nc" id="L30">        UsuarioEntity entity = usuarioMapper.toEntity(usuario);</span>
-<span class="nc" id="L31">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
-<span class="nc" id="L32">            String sql = &quot;CALL public.pr_insert_usuario(?, ?, ?)&quot;;</span>
-<span class="nc" id="L33">            try(CallableStatement cs = connection.prepareCall(sql)){</span>
-<span class="nc" id="L34">                cs.setString(1, entity.getNome());</span>
+<span class="fc" id="L30">        UsuarioEntity entity = usuarioMapper.toEntity(usuario);</span>
+<span class="fc" id="L31">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L32">            String sql = &quot;CALL public.pr_insert_usuario(?, ?, ?)&quot;;</span>
+<span class="fc" id="L33">            try(CallableStatement cs = connection.prepareCall(sql)){</span>
+<span class="fc" id="L34">                cs.setString(1, entity.getNome());</span>
 
-<span class="nc" id="L36">                cs.registerOutParameter(2, Types.BIGINT);</span>
-<span class="nc" id="L37">                cs.registerOutParameter(3, Types.VARCHAR);</span>
-<span class="nc" id="L38">                cs.execute();</span>
+<span class="fc" id="L36">                cs.registerOutParameter(2, Types.BIGINT);</span>
+<span class="fc" id="L37">                cs.registerOutParameter(3, Types.VARCHAR);</span>
+<span class="fc" id="L38">                cs.execute();</span>
 
 
-<span class="nc" id="L41">                entity.setId(cs.getLong(2));</span>
-<span class="nc" id="L42">                entity.setNome(cs.getString(3));</span>
+<span class="fc" id="L41">                entity.setId(cs.getLong(2));</span>
+<span class="fc" id="L42">                entity.setNome(cs.getString(3));</span>
 
-<span class="nc" id="L44">                return usuarioMapper.toDomain(entity);</span>
+<span class="fc" id="L44">                return usuarioMapper.toDomain(entity);</span>
             }
         });
     }
 
     @Override
     public void deletarUsuario(Long usuarioId) {
-<span class="nc" id="L51">        String sql = &quot;CALL public.pr_deletar_usuario(?)&quot;;</span>
-<span class="nc" id="L52">        jdbcTemplate.update(sql, usuarioId);</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L51">        String sql = &quot;CALL public.pr_deletar_usuario(?)&quot;;</span>
+<span class="fc" id="L52">        jdbcTemplate.update(sql, usuarioId);</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public Optional&lt;Usuario&gt; buscarPorId(Long id) {
-<span class="nc" id="L57">        String sql = &quot;SELECT * FROM public.fn_buscar_usuario_por_id(?)&quot;;</span>
+<span class="fc" id="L57">        String sql = &quot;SELECT * FROM public.fn_buscar_usuario_por_id(?)&quot;;</span>
 
-<span class="nc" id="L59">        List&lt;Usuario&gt; usuarios = jdbcTemplate.query(</span>
+<span class="fc" id="L59">        List&lt;Usuario&gt; usuarios = jdbcTemplate.query(</span>
                 sql,
                 new Object[]{id},
 <span class="nc" id="L62">                (rs, rowNum) -&gt; new Usuario(</span>
@@ -65,27 +65,27 @@ public class UsuarioRepository  implements UsuarioOutputPort {
                 )
         );
 
-<span class="nc" id="L68">        return usuarios.stream().findFirst();</span>
+<span class="fc" id="L68">        return usuarios.stream().findFirst();</span>
     }
 
     @Override
     public Usuario alterarInfoUsuario(Usuario usuario) {
-<span class="nc" id="L73">        UsuarioEntity entity = usuarioMapper.toEntity(usuario);</span>
+<span class="fc" id="L73">        UsuarioEntity entity = usuarioMapper.toEntity(usuario);</span>
 
-<span class="nc" id="L75">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
-<span class="nc" id="L76">            String sql = &quot;CALL public.pr_update_usuario(?, ?, ?)&quot;;</span>
-<span class="nc" id="L77">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
+<span class="fc" id="L75">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L76">            String sql = &quot;CALL public.pr_update_usuario(?, ?, ?)&quot;;</span>
+<span class="fc" id="L77">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
 
-<span class="nc" id="L79">                cs.setLong(1, entity.getId());</span>
-<span class="nc" id="L80">                cs.setString(2, entity.getNome());</span>
+<span class="fc" id="L79">                cs.setLong(1, entity.getId());</span>
+<span class="fc" id="L80">                cs.setString(2, entity.getNome());</span>
 
-<span class="nc" id="L82">                cs.registerOutParameter(3, Types.VARCHAR);</span>
+<span class="fc" id="L82">                cs.registerOutParameter(3, Types.VARCHAR);</span>
 
-<span class="nc" id="L84">                cs.execute();</span>
+<span class="fc" id="L84">                cs.execute();</span>
 
-<span class="nc" id="L86">                entity.setNome(cs.getString(3));</span>
+<span class="fc" id="L86">                entity.setNome(cs.getString(3));</span>
 
-<span class="nc" id="L88">                return usuarioMapper.toDomain(entity);</span>
+<span class="fc" id="L88">                return usuarioMapper.toDomain(entity);</span>
             }
         });
 
