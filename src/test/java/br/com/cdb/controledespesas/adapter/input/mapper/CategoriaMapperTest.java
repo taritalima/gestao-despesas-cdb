@@ -12,7 +12,16 @@ class CategoriaMapperTest {
 
     private final CategoriaMapper mapper = CategoriaMapper.INSTANCE;
 
+    @Test
+    void deveConverterDomainParaResponse() {
+        Categoria categoria = new Categoria(1L, "Bebidas");
 
+        CategoriaResponse response = mapper.toResponse(categoria);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getId()).isEqualTo(1L);
+        assertThat(response.getNome()).isEqualTo("Bebidas");
+    }
 
     @Test
     void deveConverterEntityParaDomain() {
@@ -27,7 +36,16 @@ class CategoriaMapperTest {
         assertThat(domain.getNome()).isEqualTo("Massa");
     }
 
-    
+    @Test
+    void deveConverterDomainParaEntity() {
+        Categoria domain = new Categoria(3L, "Doces");
+
+        CategoriaEntity entity = mapper.toEntity(domain);
+
+        assertThat(entity).isNotNull();
+        assertThat(entity.getId()).isEqualTo(3L);
+        assertThat(entity.getNome()).isEqualTo("Doces");
+    }
 
     @Test
     void deveConverterRequestParaDomain() {
