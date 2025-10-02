@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 br\com\cdb\controledespesas\adapter\input\mapper\CategoriaMapperTest.class
 br\com\cdb\controledespesas\adapter\input\controller\DespesaControllerTest.class
 br\com\cdb\controledespesas\adapter\input\controller\UsuarioControllerTest.class
@@ -17,3 +18,6 @@ br\com\cdb\controledespesas\adapter\input\mapper\UsuarioMapperTest.class
 br\com\cdb\controledespesas\adapter\input\response\ErroResponseTest.class
 br\com\cdb\controledespesas\core\domain\usecase\DespesaUseCaseTest.class
 br\com\cdb\controledespesas\adapter\input\controller\CategoriaControllerTest.class
+=======
+br\com\cdb\controledespesas\ControleDespesasApplicationTests.class
+>>>>>>> a41fce4 (resolvendo conflitos)

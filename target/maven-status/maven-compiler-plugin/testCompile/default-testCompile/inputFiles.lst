@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\adapter\output\repository\UsuarioRepositoryTest.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\ControleDespesasApplicationTests.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\adapter\input\mapper\DespesaMapperTest.java
@@ -17,3 +18,6 @@ C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledes
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\adapter\output\repository\CategoriaRepositoryTest.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\core\domain\usecase\DespesaUseCaseTest.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\test\java\br\com\cdb\controledespesas\adapter\input\response\CategoriaResponse.java
+=======
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\test\java\br\com\cdb\controledespesas\ControleDespesasApplicationTests.java
+>>>>>>> a41fce4 (resolvendo conflitos)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\core\domain\exception\BusinessRuleException.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\ControleDespesasApplication.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\port\output\CategoriaOutputPort.java
@@ -38,3 +39,45 @@ C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledes
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\adapter\input\controller\CategoriaController.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\adapter\input\response\SomaDespesasResponse.java
 C:\Users\pedro henrique\gestao-despesas-cdb\src\main\java\br\com\cdb\controledespesas\port\output\UsuarioOutputPort.java
+=======
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\output\CategoriaOutputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\model\Usuario.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\exception\ValidationExceptionHandler.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\response\SomaDespesasResponse.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\mapper\DespesaMapper.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\response\CategoriaResponse.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\repository\DespesaRepository.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\repository\UsuarioRepository.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\usecase\UsuarioUseCase.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\controller\UsuarioController.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\input\DespesaInputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\controller\CategoriaController.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\request\SomaDespesasRequest.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\request\UsuarioRequest.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\usecase\CategoriaUseCase.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\request\CategoriaRequest.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\infraestructure\UsuarioUseCaseBean.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\output\DespesaOutputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\output\UsuarioOutputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\mapper\UsuarioMapper.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\model\Despesa.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\response\UsuarioResponse.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\response\DespesaResponse.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\input\CategoriaInputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\ControleDespesasApplication.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\port\input\UsuarioInputPort.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\response\ErroResponse.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\model\Categoria.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\usecase\DespesaUseCase.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\entity\UsuarioEntity.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\repository\CategoriaRepository.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\infraestructure\CategoriaUseCaseBean.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\core\domain\exception\BusinessRuleException.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\mapper\CategoriaMapper.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\entity\CategoriaEntity.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\controller\DespesaController.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\infraestructure\DespesaUseCaseBean.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\output\entity\DespesaEntity.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\request\FiltroDespesasRequest.java
+C:\Users\tarit\Documents\Projetos-Java-Avançado\controle-despesas\src\main\java\br\com\cdb\controledespesas\adapter\input\request\DespesaRequest.java
+>>>>>>> a41fce4 (resolvendo conflitos)
