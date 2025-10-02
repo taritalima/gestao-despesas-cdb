@@ -22,18 +22,18 @@ import java.util.Map;
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErroResponse exceptionHandler(MethodArgumentNotValidException ex, HttpServletRequest request){
-<span class="nc" id="L25">        Map&lt;String,String&gt; mapCamposComErro = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L25">        Map&lt;String,String&gt; mapCamposComErro = new HashMap&lt;&gt;();</span>
 
-<span class="nc" id="L27">        ex.getBindingResult().getAllErrors().forEach((error -&gt; {</span>
-<span class="nc" id="L28">            String fieldName = ((FieldError) error).getField();</span>
-<span class="nc" id="L29">            String errorMessage = error.getDefaultMessage();</span>
-<span class="nc" id="L30">            mapCamposComErro.put(fieldName, errorMessage);</span>
-<span class="nc" id="L31">        }));</span>
-<span class="nc" id="L32">        return new ErroResponse(</span>
-<span class="nc" id="L33">                LocalDateTime.now(),</span>
+<span class="fc" id="L27">        ex.getBindingResult().getAllErrors().forEach((error -&gt; {</span>
+<span class="fc" id="L28">            String fieldName = ((FieldError) error).getField();</span>
+<span class="fc" id="L29">            String errorMessage = error.getDefaultMessage();</span>
+<span class="fc" id="L30">            mapCamposComErro.put(fieldName, errorMessage);</span>
+<span class="fc" id="L31">        }));</span>
+<span class="fc" id="L32">        return new ErroResponse(</span>
+<span class="fc" id="L33">                LocalDateTime.now(),</span>
 
-<span class="nc" id="L35">                HttpStatus.BAD_REQUEST.value(),</span>
-<span class="nc" id="L36">                request.getRequestURI(),</span>
+<span class="fc" id="L35">                HttpStatus.BAD_REQUEST.value(),</span>
+<span class="fc" id="L36">                request.getRequestURI(),</span>
                 mapCamposComErro
         );
     }
@@ -42,13 +42,13 @@ import java.util.Map;
     @ResponseBody
     @ExceptionHandler(BusinessRuleException.class)
     public ErroResponse handleBusinessRuleException(BusinessRuleException ex, HttpServletRequest request) {
-<span class="nc" id="L45">        Map&lt;String, String&gt; mapErro = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L46">        mapErro.put(&quot;mensagem&quot;, ex.getMessage());</span>
+<span class="fc" id="L45">        Map&lt;String, String&gt; mapErro = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L46">        mapErro.put(&quot;mensagem&quot;, ex.getMessage());</span>
 
-<span class="nc" id="L48">        return new ErroResponse(</span>
-<span class="nc" id="L49">                LocalDateTime.now(),</span>
-<span class="nc" id="L50">                HttpStatus.BAD_REQUEST.value(),</span>
-<span class="nc" id="L51">                request.getRequestURI(),</span>
+<span class="fc" id="L48">        return new ErroResponse(</span>
+<span class="fc" id="L49">                LocalDateTime.now(),</span>
+<span class="fc" id="L50">                HttpStatus.BAD_REQUEST.value(),</span>
+<span class="fc" id="L51">                request.getRequestURI(),</span>
                 mapErro
         );
     }
