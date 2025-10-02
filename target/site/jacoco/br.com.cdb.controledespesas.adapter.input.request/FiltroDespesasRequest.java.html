@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FiltroDespesasRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.input.request</a> &gt; <span class="el_source">FiltroDespesasRequest.java</span></div><h1>FiltroDespesasRequest.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.input.request;
+
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+
+@Getter
+<span class="pc" id="L13">@Setter</span>
+<span class="fc" id="L14">public class FiltroDespesasRequest {</span>
+
+    @NotNull
+<span class="fc" id="L17">    private Long usuarioId;</span>
+
+    @NotNull
+<span class="fc" id="L20">    private Long categoriaId;</span>
+    @PastOrPresent(message=&quot;A data de inicio não pode ser futura&quot;)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+<span class="fc" id="L23">    private LocalDate de;</span>
+
+    @PastOrPresent(message=&quot;A data final não pode ser futura&quot;)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+<span class="fc" id="L27">    private LocalDate ate;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

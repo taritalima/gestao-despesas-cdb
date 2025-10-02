@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DespesaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.input.controller</a> &gt; <span class="el_source">DespesaController.java</span></div><h1>DespesaController.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.input.controller;
+
+import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
+import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
+import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
+import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
+import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
+import br.com.cdb.controledespesas.core.domain.model.Despesa;
+import br.com.cdb.controledespesas.infraestructure.DespesaUseCaseBean;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@Tag(name = &quot;Despesas&quot;, description = &quot;Endpoints para controle de despesas pessoais&quot;)
+@RestController
+@RequestMapping(&quot;/despesas&quot;)
+public class DespesaController {
+
+    private final DespesaUseCaseBean despesaUseCase;
+    private final  DespesaMapper despesaMapper;
+
+<span class="fc" id="L25">    public DespesaController(DespesaUseCaseBean despesaUseCase, DespesaMapper despesaMapper) {</span>
+<span class="fc" id="L26">        this.despesaUseCase = despesaUseCase;</span>
+<span class="fc" id="L27">        this.despesaMapper = despesaMapper;</span>
+<span class="fc" id="L28">    }</span>
+
+    @PostMapping(&quot;/{usuarioId}&quot;)
+    public ResponseEntity&lt;DespesaResponse&gt; addDespesa(@PathVariable Long usuarioId, @Valid @RequestBody DespesaRequest despesaRequest){
+
+<span class="fc" id="L33">        despesaRequest.setUsuarioId(usuarioId);</span>
+
+<span class="fc" id="L35">        Despesa despesa = despesaMapper.toDomain(despesaRequest);</span>
+<span class="fc" id="L36">        Despesa despesaSalva = despesaUseCase.salvarDespesa(despesa);</span>
+<span class="fc" id="L37">        DespesaResponse response = despesaMapper.toResponse(despesaSalva);</span>
+
+<span class="fc" id="L39">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;SomaDespesasResponse&gt; listarDespesasPorData(
+            @Valid FiltroDespesasRequest filtroDespesasRequest) {
+
+<span class="fc" id="L46">        SomaDespesasResponse response = despesaUseCase.listarDespesasComTotal(filtroDespesasRequest);</span>
+<span class="fc" id="L47">        return ResponseEntity.ok(response);</span>
+    }
+
+    @PutMapping(&quot;/{id}/{usuarioId}&quot;)
+    public ResponseEntity&lt;DespesaResponse&gt; atualizarDespesa(
+            @PathVariable Long id,
+            @PathVariable Long usuarioId,
+            @Valid @RequestBody DespesaRequest despesaRequest) {
+
+<span class="fc" id="L56">        Despesa despesaAtualizada = despesaUseCase.atualizarDespesa(id, usuarioId, despesaRequest);</span>
+
+<span class="fc" id="L58">        DespesaResponse response = despesaMapper.toResponse(despesaAtualizada);</span>
+
+<span class="fc" id="L60">        return ResponseEntity.ok(response);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}/{usuarioId}&quot;)
+    public ResponseEntity&lt;Void&gt; deletarDespesaUsuario(@PathVariable Long id, @PathVariable Long usuarioId){
+<span class="fc" id="L65">        despesaUseCase.deletarDespesaPorId(id, usuarioId);</span>
+<span class="fc" id="L66">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

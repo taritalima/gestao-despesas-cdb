@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DespesaUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.core.domain.usecase</a> &gt; <span class="el_source">DespesaUseCase.java</span></div><h1>DespesaUseCase.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.core.domain.usecase;
+
+import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
+import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
+import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
+import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
+import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
+import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.core.domain.model.Despesa;
+import br.com.cdb.controledespesas.port.input.DespesaInputPort;
+import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
+import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
+
+import java.math.BigDecimal;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class DespesaUseCase implements DespesaInputPort {
+
+    private final CategoriaOutputPort categoriaOutputPort;
+    private final DespesaOutputPort despesaOutputPort;
+    private final DespesaMapper despesaMapper;
+<span class="fc" id="L25">    private static final Logger log = LoggerFactory.getLogger(DespesaUseCase.class);</span>
+
+
+<span class="fc" id="L28">    public DespesaUseCase(CategoriaOutputPort categoriaOutputPort, DespesaOutputPort despesaOutputPort, DespesaMapper despesaMapper) {</span>
+<span class="fc" id="L29">        this.categoriaOutputPort = categoriaOutputPort;</span>
+<span class="fc" id="L30">        this.despesaOutputPort = despesaOutputPort;</span>
+<span class="fc" id="L31">        this.despesaMapper = despesaMapper;</span>
+<span class="fc" id="L32">    }</span>
+
+    public Despesa salvarDespesa(Despesa despesa) {
+        try {
+<span class="fc" id="L36">            Categoria categoria = categoriaOutputPort.buscarPorId(despesa.getCategoriaId())</span>
+<span class="fc" id="L37">                    .orElseThrow(() -&gt; {</span>
+<span class="fc" id="L38">                        log.error(&quot;Categoria não encontrada: {}&quot;, despesa.getCategoriaId());</span>
+<span class="fc" id="L39">                        return new BusinessRuleException(&quot;Categoria não encontrada&quot;);</span>
+                    });
+
+<span class="fc" id="L42">            despesa.setCategoriaId(categoria.getId());</span>
+<span class="fc" id="L43">            Despesa salva = despesaOutputPort.salvarDespesa(despesa);</span>
+
+<span class="fc" id="L45">            log.info(&quot;Despesa salva com sucesso: {}&quot;, salva);</span>
+<span class="fc" id="L46">            return salva;</span>
+
+<span class="fc" id="L48">        } catch (Exception e) {</span>
+<span class="fc" id="L49">            log.error(&quot;Erro ao salvar despesa: {}&quot;, despesa, e);</span>
+<span class="fc" id="L50">            throw e;</span>
+        }
+    }
+
+    public List&lt;Despesa&gt; filtrarDespesas(FiltroDespesasRequest filtroDespesasRequest) {
+        try {
+<span class="fc" id="L56">            Categoria categoria = null;</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if (filtroDespesasRequest.getCategoriaId() != null) {</span>
+<span class="nc" id="L58">                categoria = categoriaOutputPort.buscarPorId(filtroDespesasRequest.getCategoriaId())</span>
+<span class="nc" id="L59">                        .orElseThrow(() -&gt; {</span>
+<span class="nc" id="L60">                            log.warn(&quot;Categoria não encontrada: {}&quot;, filtroDespesasRequest.getCategoriaId());</span>
+<span class="nc" id="L61">                            return new BusinessRuleException(&quot;Categoria não encontrada&quot;);</span>
+                        });
+            }
+<span class="pc bpc" id="L64" title="1 of 4 branches missed.">            if (filtroDespesasRequest.getDe() != null &amp;&amp; filtroDespesasRequest.getAte() != null</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">                    &amp;&amp; filtroDespesasRequest.getDe().isAfter(filtroDespesasRequest.getAte())) {</span>
+<span class="fc" id="L66">                log.warn(&quot;Data de início maior que data final: de={} ate={}&quot;,</span>
+<span class="fc" id="L67">                        filtroDespesasRequest.getDe(), filtroDespesasRequest.getAte());</span>
+<span class="fc" id="L68">                throw new BusinessRuleException(&quot;A data de início não pode ser maior que a data final!&quot;);</span>
+            }
+
+<span class="fc" id="L71">            List&lt;Despesa&gt; despesas = despesaOutputPort.filtrarDespesas(</span>
+<span class="fc" id="L72">                    filtroDespesasRequest.getUsuarioId(),</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                    categoria != null ? categoria.getId() : null,</span>
+<span class="fc" id="L74">                    filtroDespesasRequest.getDe(),</span>
+<span class="fc" id="L75">                    filtroDespesasRequest.getAte()</span>
+            );
+<span class="fc" id="L77">            log.info(&quot;Filtradas {} despesas para o usuário {}&quot;, despesas.size(), filtroDespesasRequest.getUsuarioId());</span>
+<span class="fc" id="L78">            return despesas;</span>
+<span class="fc" id="L79">        } catch (BusinessRuleException e) {</span>
+<span class="fc" id="L80">            log.warn(&quot;Regra de negócio violada ao filtrar informações despesa: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L81">            throw e;</span>
+<span class="nc" id="L82">        } catch (Exception e) {</span>
+<span class="nc" id="L83">            log.error(&quot;Erro inesperado ao filtrar informações despesa&quot;);</span>
+<span class="nc" id="L84">            throw e;</span>
+        }
+    }
+
+    public void deletarDespesaPorId(Long id, Long usuarioId) {
+        try {
+<span class="fc" id="L90">            despesaOutputPort.buscarPorIdEUsuario(id, usuarioId)</span>
+<span class="fc" id="L91">                    .orElseThrow(() -&gt; {</span>
+<span class="fc" id="L92">                        log.warn(&quot;Despesa não encontrada para o usuário={} com id={}&quot;, usuarioId, id);</span>
+<span class="fc" id="L93">                        return new BusinessRuleException(&quot;Despesa não encontrada para o usuário&quot;);</span>
+                    });
+
+<span class="fc" id="L96">            despesaOutputPort.deletarDespesaPorId(id, usuarioId);</span>
+<span class="fc" id="L97">            log.info(&quot;Despesa deletada com sucesso: id={} usuarioId={}&quot;, id, usuarioId);</span>
+
+<span class="fc" id="L99">        } catch (BusinessRuleException e) {</span>
+<span class="fc" id="L100">            log.warn(&quot;Regra de negócio violada ao deletar despesa: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L101">            throw e;</span>
+<span class="nc" id="L102">        } catch (Exception e) {</span>
+<span class="nc" id="L103">            log.error(&quot;Erro inesperado ao deletar despesa: id={} usuarioId={}&quot;, id, usuarioId, e);</span>
+<span class="nc" id="L104">            throw e;</span>
+<span class="fc" id="L105">        }</span>
+<span class="fc" id="L106">    }</span>
+
+    public Despesa atualizarDespesa(Long id, Long usuarioId, DespesaRequest despesaRequest) {
+        try {
+<span class="fc" id="L110">            Despesa despesaExistente = despesaOutputPort.buscarPorIdEUsuario(id, usuarioId)</span>
+<span class="fc" id="L111">                    .orElseThrow(() -&gt; {</span>
+<span class="nc" id="L112">                        log.warn(&quot;Despesa não encontrada para o usuário={} com id={}&quot;, usuarioId, id);</span>
+<span class="nc" id="L113">                        return new BusinessRuleException(&quot;Despesa não encontrada para o usuário&quot;);</span>
+                    });
+
+<span class="fc" id="L116">            Categoria categoria = categoriaOutputPort.buscarPorId(despesaRequest.getCategoriaId())</span>
+<span class="fc" id="L117">                    .orElseThrow(() -&gt; {</span>
+<span class="nc" id="L118">                        log.warn(&quot;Categoria não encontrada: {}&quot;, despesaRequest.getCategoriaId());</span>
+<span class="nc" id="L119">                        return new BusinessRuleException(&quot;Categoria não encontrada&quot;);</span>
+                    });
+
+<span class="fc" id="L122">            despesaExistente.setDescricao(despesaRequest.getDescricao());</span>
+<span class="fc" id="L123">            despesaExistente.setValor(despesaRequest.getValor());</span>
+<span class="fc" id="L124">            despesaExistente.setCategoriaId(categoria.getId());</span>
+<span class="fc" id="L125">            despesaExistente.setPagoEm(despesaRequest.getPagoEm());</span>
+
+<span class="fc" id="L127">            Despesa atualizada = despesaOutputPort.atualizarDespesa(despesaExistente);</span>
+
+<span class="fc" id="L129">            log.info(&quot;Despesa atualizada com sucesso: id={} usuarioId={}&quot;, id, usuarioId);</span>
+<span class="fc" id="L130">            return atualizada;</span>
+
+<span class="nc" id="L132">        } catch (BusinessRuleException e) {</span>
+<span class="nc" id="L133">            log.warn(&quot;Regra de negócio violada ao atualizar despesa: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L134">            throw e;</span>
+<span class="nc" id="L135">        } catch (Exception e) {</span>
+<span class="nc" id="L136">            log.error(&quot;Erro inesperado ao atualizar despesa id={} usuarioId={}&quot;, id, usuarioId, e);</span>
+<span class="nc" id="L137">            throw e;</span>
+        }
+    }
+
+    public SomaDespesasResponse listarDespesasComTotal(FiltroDespesasRequest filtro) {
+<span class="fc" id="L142">        List&lt;Despesa&gt; despesas = filtrarDespesas(filtro);</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (despesas.isEmpty()) {</span>
+<span class="fc" id="L145">            log.warn(&quot;Nenhuma despesa encontrada para o usuário {}&quot;, filtro.getUsuarioId());</span>
+<span class="fc" id="L146">            throw new BusinessRuleException(&quot;Nenhuma despesa encontrada para o usuário&quot;);</span>
+        }
+
+<span class="fc" id="L149">        BigDecimal total = despesas.stream()</span>
+<span class="fc" id="L150">                .map(Despesa::getValor)</span>
+<span class="fc" id="L151">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+
+<span class="fc" id="L153">        List&lt;DespesaResponse&gt; despesasResponse = despesas.stream()</span>
+<span class="fc" id="L154">                .map(despesaMapper::toResponse)</span>
+<span class="fc" id="L155">                .toList();</span>
+
+<span class="fc" id="L157">        return new SomaDespesasResponse(total, despesasResponse);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

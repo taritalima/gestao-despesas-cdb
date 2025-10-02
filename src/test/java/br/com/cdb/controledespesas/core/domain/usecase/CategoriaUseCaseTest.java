@@ -1,0 +1,166 @@
+package br.com.cdb.controledespesas.core.domain.usecase;
+
+import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import br.com.cdb.controledespesas.core.domain.usecase.CategoriaUseCase;
+import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
+import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class CategoriaUseCaseTest {
+
+    @Mock
+    private CategoriaOutputPort categoriaOutputPort;
+
+    @Mock
+    private DespesaOutputPort despesaOutputPort;
+
+    @InjectMocks
+    private CategoriaUseCase categoriaUseCase;
+
+    private Categoria categoriaTeste;
+
+    @BeforeEach
+    void setUp(){
+        categoriaTeste = new Categoria(1L, "Bebidas");
+    }
+
+    @Test
+    @DisplayName("Deve salvar uma categoria com sucesso quando o nome não existe")
+    void SalvarCategoriaNovo() {
+        // GIVEN
+        when(categoriaOutputPort.buscarPorName(categoriaTeste.getNome())).thenReturn(Optional.empty());
+        when(categoriaOutputPort.salvarCategoria(any(Categoria.class))).thenReturn(categoriaTeste);
+
+        // WHEN
+        Categoria categoriaSalva = categoriaUseCase.salvarCategoria(categoriaTeste);
+
+        // THEN
+        assertNotNull(categoriaSalva);
+        assertEquals(categoriaTeste.getNome(), categoriaSalva.getNome());
+        verify(categoriaOutputPort).buscarPorName(categoriaTeste.getNome());
+        verify(categoriaOutputPort).salvarCategoria(categoriaTeste);
+    }
+
+    @Test
+    @DisplayName("Não deve salvar categoria com nome duplicado")
+    void naoDeveSalvarCategoriaComNomeDuplicado() {
+        // GIVEN
+        when(categoriaOutputPort.buscarPorName(categoriaTeste.getNome())).thenReturn(Optional.of(categoriaTeste));
+
+        // WHEN + THEN
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class,
+                () -> categoriaUseCase.salvarCategoria(categoriaTeste));
+
+        assertEquals("Já existe Categoria com esse nome!", exception.getMessage());
+        verify(categoriaOutputPort, never()).salvarCategoria(any(Categoria.class));
+    }
+
+    @Test
+    @DisplayName("Deve deletar categoria com sucesso quando não há despesas vinculadas")
+    void deveDeletarCategoriaComSucesso() {
+        // GIVEN
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+        when(despesaOutputPort.existsByCategoria(categoriaTeste.getId())).thenReturn(false);
+
+        // WHEN
+        categoriaUseCase.deletarCategoria(categoriaTeste.getId());
+
+        // THEN
+        verify(categoriaOutputPort).deletarCategoria(categoriaTeste.getId());
+    }
+
+    @Test
+    @DisplayName("Não deve deletar categoria inexistente")
+    void naoDeveDeletarCategoriaInexistente(){
+        //Given
+        when(categoriaOutputPort.buscarPorId(anyLong())).thenReturn(Optional.empty());
+
+        //when + then
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(100L));
+        assertEquals("Categoria não encontrada", exception.getMessage());
+        verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
+    }
+
+    @Test
+    @DisplayName("Não deve deletar categoria com despesas vinculadas")
+    void naoDeveDeletarCategoriaComDespesasVinculadas(){
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+        when(despesaOutputPort.existsByCategoria(categoriaTeste.getId())).thenReturn(true);
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> categoriaUseCase.deletarCategoria(categoriaTeste.getId()));
+
+        assertEquals("Não é possível remover a categoria, existem despesas vinculadas.", exception.getMessage());
+        verify(categoriaOutputPort, never()).deletarCategoria(anyLong());
+    }
+
+    @Test
+    @DisplayName("Deve buscar categoria por ID com sucesso")
+    void deveBuscarCategoriaPorId() {
+
+        when(categoriaOutputPort.buscarPorId(categoriaTeste.getId())).thenReturn(Optional.of(categoriaTeste));
+
+        Categoria categoriaEncontrada = categoriaUseCase.buscarCategoriaId(categoriaTeste.getId());
+
+        assertNotNull(categoriaEncontrada);
+        assertEquals(categoriaTeste.getId(), categoriaEncontrada.getId());
+        assertEquals(categoriaTeste.getNome(), categoriaEncontrada.getNome());
+        verify(categoriaOutputPort).buscarPorId(categoriaTeste.getId());
+    }
+
+    @Test
+    @DisplayName("Não deve buscar categoria inexistente por ID")
+    void naoDeveBuscarCategoriaInexistentePorId() {
+        when(categoriaOutputPort.buscarPorId(anyLong())).thenReturn(Optional.empty());
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class,
+                () -> categoriaUseCase.buscarCategoriaId(99L));
+
+        assertEquals("Categoria não encontrada", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve listar todas as categorias com sucesso")
+    void deveListarTodasCategorias() {
+        List<Categoria> categoriasEsperadas = Arrays.asList(
+                new Categoria(1L, "Alimentação"),
+                new Categoria(2L, "Transporte")
+        );
+        when(categoriaOutputPort.buscarTodasCategoria()).thenReturn(categoriasEsperadas);
+
+        List<Categoria> categoriasEncontradas = categoriaUseCase.buscarTodasCategorias();
+
+        assertNotNull(categoriasEncontradas);
+        assertEquals(2, categoriasEncontradas.size());
+        assertEquals("Alimentação", categoriasEncontradas.get(0).getNome());
+        verify(categoriaOutputPort).buscarTodasCategoria();
+    }
+
+    @Test
+    @DisplayName("Não deve listar categorias quando nenhuma for encontrada")
+    void naoDeveListarCategoriasQuandoNaoExistirem() {
+        when(categoriaOutputPort.buscarTodasCategoria()).thenReturn(Collections.emptyList());
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class,
+                () -> categoriaUseCase.buscarTodasCategorias());
+
+        assertEquals("Não existem categorias cadastradas.", exception.getMessage());
+    }
+
+}

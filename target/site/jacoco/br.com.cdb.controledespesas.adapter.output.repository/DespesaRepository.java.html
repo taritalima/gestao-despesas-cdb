@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DespesaRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.output.repository</a> &gt; <span class="el_source">DespesaRepository.java</span></div><h1>DespesaRepository.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.output.repository;
+
+import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
+import br.com.cdb.controledespesas.adapter.output.entity.DespesaEntity;
+import br.com.cdb.controledespesas.core.domain.model.Despesa;
+import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import org.springframework.stereotype.Repository;
+
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class DespesaRepository implements DespesaOutputPort {
+
+    private final JdbcTemplate jdbcTemplate;
+    private final DespesaMapper despesaMapper;
+
+<span class="fc" id="L22">    public DespesaRepository(JdbcTemplate jdbcTemplate, DespesaMapper despesaMapper) {</span>
+<span class="fc" id="L23">        this.jdbcTemplate = jdbcTemplate;</span>
+<span class="fc" id="L24">        this.despesaMapper = despesaMapper;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Override
+    public Despesa salvarDespesa(Despesa despesa) {
+<span class="fc" id="L29">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
+
+<span class="fc" id="L31">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L32">            String sql = &quot;CALL pr_insert_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="fc" id="L33">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
+
+<span class="fc" id="L35">                cs.setLong(1, entity.getUsuarioId());</span>
+<span class="fc" id="L36">                cs.setString(2, entity.getDescricao());</span>
+<span class="fc" id="L37">                cs.setBigDecimal(3, entity.getValor());</span>
+<span class="fc" id="L38">                cs.setLong(4, entity.getCategoriaId());</span>
+<span class="fc" id="L39">                cs.setDate(5, java.sql.Date.valueOf(entity.getPagoEm()));</span>
+
+
+<span class="fc" id="L42">                cs.registerOutParameter(6, Types.BIGINT);</span>
+<span class="fc" id="L43">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
+
+<span class="fc" id="L45">                cs.execute();</span>
+
+<span class="fc" id="L47">                entity.setId(cs.getLong(6));</span>
+<span class="fc" id="L48">                entity.setCriadoEm(cs.getTimestamp(7).toLocalDateTime());</span>
+
+<span class="fc" id="L50">                return despesaMapper.toDomain(entity);</span>
+            }
+        });
+    }
+
+    @Override
+    public Despesa atualizarDespesa(Despesa despesa){
+<span class="fc" id="L57">        DespesaEntity entity = despesaMapper.toEntity(despesa);</span>
+
+<span class="fc" id="L59">        return jdbcTemplate.execute((Connection connection) -&gt; {</span>
+<span class="fc" id="L60">            String sql = &quot;CALL public.pr_update_despesa(?, ?, ?, ?, ?, ?, ?)&quot;;</span>
+
+<span class="fc" id="L62">            try (CallableStatement cs = connection.prepareCall(sql)) {</span>
+<span class="fc" id="L63">                cs.setLong(1, entity.getId());</span>
+<span class="fc" id="L64">                cs.setLong(2, entity.getUsuarioId());</span>
+<span class="fc" id="L65">                cs.setString(3, entity.getDescricao());</span>
+<span class="fc" id="L66">                cs.setBigDecimal(4, entity.getValor());</span>
+<span class="fc" id="L67">                cs.setLong(5, entity.getCategoriaId());</span>
+<span class="fc" id="L68">                cs.setDate(6, java.sql.Date.valueOf(entity.getPagoEm()));</span>
+
+<span class="fc" id="L70">                cs.registerOutParameter(7, Types.TIMESTAMP);</span>
+
+<span class="fc" id="L72">                cs.execute();</span>
+
+<span class="fc" id="L74">                Timestamp criadoEm = cs.getTimestamp(7);</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">                if (criadoEm != null) {</span>
+<span class="fc" id="L76">                    entity.setCriadoEm(criadoEm.toLocalDateTime());</span>
+                }
+
+<span class="fc" id="L79">                return despesaMapper.toDomain(entity);</span>
+            }
+        });
+}
+
+    @Override
+    public void deletarDespesaPorId(Long id, Long usuarioId){
+<span class="fc" id="L86">        String sql = &quot;CALL public.pr_delete_despesa(?, ?)&quot;;</span>
+<span class="fc" id="L87">        jdbcTemplate.update(sql, id, usuarioId);</span>
+<span class="fc" id="L88">    }</span>
+
+    @Override
+    public List&lt;Despesa&gt; filtrarDespesas(Long usuarioId, Long categoriaId, LocalDate de, LocalDate ate) {
+
+<span class="fc" id="L93">        String sql = &quot;SELECT * FROM public.fn_filtrar_despesas(?, ?, ?, ?)&quot;;</span>
+
+<span class="fc" id="L95">        List&lt;DespesaEntity&gt; resultados = jdbcTemplate.query(</span>
+<span class="nc" id="L96">                sql, (rs, rowNum) -&gt; new DespesaEntity(</span>
+<span class="nc" id="L97">                        rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L98">                        rs.getLong(&quot;categoria_id&quot;),</span>
+<span class="nc" id="L99">                        rs.getString(&quot;descricao&quot;),</span>
+<span class="nc" id="L100">                        rs.getBigDecimal(&quot;valor&quot;),</span>
+<span class="nc" id="L101">                        rs.getDate(&quot;pago_em&quot;).toLocalDate(),</span>
+<span class="nc" id="L102">                        rs.getTimestamp(&quot;criado_em&quot;).toLocalDateTime(),</span>
+<span class="nc" id="L103">                        rs.getLong(&quot;usuario_id&quot;)</span>
+                ),
+                usuarioId,
+                categoriaId,
+<span class="fc" id="L107">                java.sql.Date.valueOf(de),</span>
+<span class="fc" id="L108">                java.sql.Date.valueOf(ate)</span>
+        );
+
+<span class="fc" id="L111">        return resultados.stream()</span>
+<span class="fc" id="L112">                .map(despesaMapper::toDomain)</span>
+<span class="fc" id="L113">                .toList();</span>
+    }
+
+    @Override
+    public Optional&lt;Despesa&gt; buscarPorIdEUsuario(Long id, Long usuarioId) {
+<span class="fc" id="L118">        String sql = &quot;SELECT * FROM public.buscar_despesa_por_id_usuario(?, ?)&quot;;</span>
+
+<span class="fc" id="L120">        List&lt;Despesa&gt; resultados = jdbcTemplate.query(</span>
+                sql,
+<span class="nc" id="L122">                (rs, rowNum) -&gt; new Despesa(</span>
+<span class="nc" id="L123">                        rs.getLong(&quot;id&quot;),</span>
+<span class="nc" id="L124">                        rs.getLong(&quot;usuario_id&quot;),</span>
+<span class="nc" id="L125">                        rs.getLong(&quot;categoria_id&quot;),</span>
+<span class="nc" id="L126">                        rs.getString(&quot;descricao&quot;),</span>
+<span class="nc" id="L127">                        rs.getBigDecimal(&quot;valor&quot;),</span>
+<span class="nc" id="L128">                        rs.getDate(&quot;pago_em&quot;).toLocalDate(),</span>
+<span class="nc" id="L129">                        rs.getTimestamp(&quot;criado_em&quot;).toLocalDateTime()</span>
+                ),
+                id, usuarioId
+        );
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        return resultados.isEmpty() ? Optional.empty() : Optional.of(resultados.get(0));</span>
+    }
+
+
+    @Override
+    public boolean existsByCategoria(Long categoriaId){
+<span class="fc" id="L140">        String sql = &quot;SELECT public.fn_exists_categoria(?)&quot;;</span>
+
+<span class="fc" id="L142">        Boolean exists = jdbcTemplate.queryForObject(</span>
+                sql,
+                Boolean.class,
+                categoriaId
+        );
+
+<span class="fc" id="L148">        return Boolean.TRUE.equals(exists);</span>
+    }
+
+    @Override
+    public boolean existsByUsuario(Long usuarioId){
+<span class="fc" id="L153">        String sql = &quot;SELECT public.fn_exists_usuario(?)&quot;;</span>
+
+<span class="fc" id="L155">        Boolean exists = jdbcTemplate.queryForObject(</span>
+                sql,
+                Boolean.class,
+                usuarioId
+        );
+
+<span class="fc" id="L161">        return Boolean.TRUE.equals(exists);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

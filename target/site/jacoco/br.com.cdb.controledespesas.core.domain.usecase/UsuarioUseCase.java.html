@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.core.domain.usecase</a> &gt; <span class="el_source">UsuarioUseCase.java</span></div><h1>UsuarioUseCase.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.core.domain.usecase;
+
+import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
+import br.com.cdb.controledespesas.core.domain.model.Usuario;
+import br.com.cdb.controledespesas.port.input.UsuarioInputPort;
+import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
+import br.com.cdb.controledespesas.port.output.UsuarioOutputPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class UsuarioUseCase implements UsuarioInputPort {
+
+    private final UsuarioOutputPort usuarioOutputPort;
+    private final DespesaOutputPort despesaOutputPort;
+<span class="fc" id="L15">    private static final Logger log = LoggerFactory.getLogger(UsuarioUseCase.class);</span>
+
+<span class="fc" id="L17">    public UsuarioUseCase(UsuarioOutputPort usuarioOutputPort, DespesaOutputPort despesaOutputPort) {</span>
+<span class="fc" id="L18">        this.usuarioOutputPort = usuarioOutputPort;</span>
+<span class="fc" id="L19">        this.despesaOutputPort = despesaOutputPort;</span>
+<span class="fc" id="L20">    }</span>
+
+    public Usuario salvarUsuario(Usuario usuario){
+<span class="fc" id="L23">        Usuario salva = usuarioOutputPort.salvarUsuario(usuario);</span>
+<span class="fc" id="L24">        log.info(&quot;Usuario '{}' salva com sucesso&quot;, salva.getNome());</span>
+<span class="fc" id="L25">        return salva;</span>
+    }
+
+    public  void deletarUsuario(Long usuarioId){
+<span class="fc" id="L29">            Usuario usuario = usuarioOutputPort.buscarPorId(usuarioId)</span>
+<span class="fc" id="L30">                    .orElseThrow(() -&gt; {</span>
+<span class="fc" id="L31">                        log.warn(&quot;Usuario não encontrada com id: {}&quot;, usuarioId);</span>
+<span class="fc" id="L32">                        return new BusinessRuleException(&quot;Usuario não encontrada&quot;);</span>
+                    });
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (despesaOutputPort.existsByUsuario(usuario.getId())) {</span>
+<span class="fc" id="L36">                log.warn(&quot;Não é possível remover o usuario, existem despesas vinculadas do usuario: {}, com id {}&quot;, usuario.getNome(), usuario.getId());</span>
+<span class="fc" id="L37">                throw new BusinessRuleException(&quot;Não é possível remover o usuario, existem despesas vinculadas.&quot;);</span>
+            }
+<span class="fc" id="L39">            usuarioOutputPort.deletarUsuario(usuario.getId());</span>
+<span class="fc" id="L40">            log.info(&quot;Usuario deletada com sucesso: {} (id={})&quot;, usuario.getNome(), usuario.getId());</span>
+<span class="fc" id="L41">    }</span>
+
+    public Usuario alterarInfoUsuario(Usuario usuario){
+<span class="fc" id="L44">       usuarioOutputPort.buscarPorId(usuario.getId())</span>
+<span class="fc" id="L45">               .orElseThrow(() -&gt; {</span>
+<span class="fc" id="L46">                   log.warn(&quot;Usuário não encontrado com id: {}&quot;, usuario.getId());</span>
+<span class="fc" id="L47">                   return new BusinessRuleException(&quot;Usuário não encontrado com id: &quot; + usuario.getId());</span>
+               });
+<span class="fc" id="L49">        Usuario usuarioAtualizado = usuarioOutputPort.alterarInfoUsuario(usuario);</span>
+<span class="fc" id="L50">        log.info(&quot;Usuario atualizado com sucesso: {} (id={})&quot;, usuarioAtualizado.getNome(), usuarioAtualizado.getId());</span>
+<span class="fc" id="L51">        return usuarioAtualizado;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

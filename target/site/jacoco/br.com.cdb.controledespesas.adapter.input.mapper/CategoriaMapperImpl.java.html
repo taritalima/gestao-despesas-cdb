@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoriaMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.input.mapper</a> &gt; <span class="el_source">CategoriaMapperImpl.java</span></div><h1>CategoriaMapperImpl.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.input.mapper;
+
+import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
+import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
+import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
+import br.com.cdb.controledespesas.core.domain.model.Categoria;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+    date = &quot;2025-10-01T21:34:40-0300&quot;,
+    comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)&quot;
+)
+@Component
+<span class="fc" id="L16">public class CategoriaMapperImpl implements CategoriaMapper {</span>
+
+    @Override
+    public CategoriaResponse toResponse(Categoria categoria) {
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if ( categoria == null ) {</span>
+<span class="nc" id="L21">            return null;</span>
+        }
+
+<span class="fc" id="L24">        Long id = null;</span>
+<span class="fc" id="L25">        String nome = null;</span>
+
+<span class="fc" id="L27">        id = categoria.getId();</span>
+<span class="fc" id="L28">        nome = categoria.getNome();</span>
+
+<span class="fc" id="L30">        CategoriaResponse categoriaResponse = new CategoriaResponse( id, nome );</span>
+
+<span class="fc" id="L32">        return categoriaResponse;</span>
+    }
+
+    @Override
+    public Categoria toDomain(CategoriaEntity entity) {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if ( entity == null ) {</span>
+<span class="nc" id="L38">            return null;</span>
+        }
+
+<span class="fc" id="L41">        Categoria categoria = new Categoria();</span>
+
+<span class="fc" id="L43">        categoria.setId( entity.getId() );</span>
+<span class="fc" id="L44">        categoria.setNome( entity.getNome() );</span>
+
+<span class="fc" id="L46">        return categoria;</span>
+    }
+
+    @Override
+    public CategoriaEntity toEntity(Categoria categoria) {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if ( categoria == null ) {</span>
+<span class="nc" id="L52">            return null;</span>
+        }
+
+<span class="fc" id="L55">        CategoriaEntity categoriaEntity = new CategoriaEntity();</span>
+
+<span class="fc" id="L57">        categoriaEntity.setId( categoria.getId() );</span>
+<span class="fc" id="L58">        categoriaEntity.setNome( categoria.getNome() );</span>
+
+<span class="fc" id="L60">        return categoriaEntity;</span>
+    }
+
+    @Override
+    public Categoria toDomain(CategoriaRequest request) {
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if ( request == null ) {</span>
+<span class="nc" id="L66">            return null;</span>
+        }
+
+<span class="fc" id="L69">        Categoria categoria = new Categoria();</span>
+
+<span class="fc" id="L71">        categoria.setNome( request.getNome() );</span>
+
+<span class="fc" id="L73">        return categoria;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

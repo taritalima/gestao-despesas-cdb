@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">controle-despesas</a> &gt; <a href="index.source.html" class="el_package">br.com.cdb.controledespesas.adapter.input.controller</a> &gt; <span class="el_source">UsuarioController.java</span></div><h1>UsuarioController.java</h1><pre class="source lang-java linenums">package br.com.cdb.controledespesas.adapter.input.controller;
+
+
+import br.com.cdb.controledespesas.adapter.input.mapper.UsuarioMapper;
+import br.com.cdb.controledespesas.adapter.input.request.UsuarioRequest;
+import br.com.cdb.controledespesas.adapter.input.response.UsuarioResponse;
+import br.com.cdb.controledespesas.core.domain.model.Usuario;
+import br.com.cdb.controledespesas.core.domain.usecase.UsuarioUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = &quot;Usuarios&quot;)
+@RestController
+@RequestMapping(&quot;/usuarios&quot;)
+public class UsuarioController {
+
+    private final UsuarioMapper usuarioMapper;
+    private final UsuarioUseCase usuarioUseCase;
+
+<span class="fc" id="L23">    public UsuarioController(UsuarioMapper usuarioMapper, UsuarioUseCase usuarioUseCase) {</span>
+<span class="fc" id="L24">        this.usuarioMapper = usuarioMapper;</span>
+<span class="fc" id="L25">        this.usuarioUseCase = usuarioUseCase;</span>
+<span class="fc" id="L26">    }</span>
+
+
+    @PostMapping
+    public ResponseEntity&lt;UsuarioResponse&gt; addUsuario(@Valid @RequestBody UsuarioRequest usuarioRequest) {
+<span class="fc" id="L31">        Usuario usuario = usuarioMapper.toDomain(usuarioRequest);</span>
+<span class="fc" id="L32">        Usuario usuarioSalvo = usuarioUseCase.salvarUsuario(usuario);</span>
+<span class="fc" id="L33">        UsuarioResponse response = usuarioMapper.toResponse(usuarioSalvo);</span>
+
+<span class="fc" id="L35">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; deletarUsuario(@PathVariable Long id){
+<span class="fc" id="L40">        usuarioUseCase.deletarUsuario(id);</span>
+<span class="fc" id="L41">        return  ResponseEntity.noContent().build();</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;UsuarioResponse&gt; alterarUsuario(@PathVariable Long id,@Valid @RequestBody UsuarioRequest usuarioRequest) {
+
+<span class="fc" id="L47">        usuarioRequest.setId(id);</span>
+<span class="fc" id="L48">        Usuario usuario = usuarioMapper.toDomain(usuarioRequest);</span>
+<span class="fc" id="L49">        Usuario usuarioAtualizado = usuarioUseCase.alterarInfoUsuario(usuario);</span>
+<span class="fc" id="L50">        UsuarioResponse response = usuarioMapper.toResponse(usuarioAtualizado);</span>
+<span class="fc" id="L51">        return ResponseEntity.ok(response);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
