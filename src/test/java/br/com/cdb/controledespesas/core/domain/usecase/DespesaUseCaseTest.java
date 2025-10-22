@@ -5,6 +5,8 @@ import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
 import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
 import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
 import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
+import br.com.cdb.controledespesas.core.domain.decorator.DespesaUseCaseLoggerDecorator;
+import br.com.cdb.controledespesas.core.domain.decorator.UsuarioUseCaseLoggerDecorator;
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.core.domain.model.Despesa;
@@ -156,5 +158,45 @@ class DespesaUseCaseTest {
         when(despesaOutputPort.filtrarDespesas(1L, null, null, null)).thenReturn(List.of());
 
         assertThrows(BusinessRuleException.class, () -> despesaUseCase.listarDespesasComTotal(filtro));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCategoriaNaoExistir() {
+        filtro.setCategoriaId(99L);
+        when(categoriaOutputPort.buscarPorId(99L)).thenReturn(Optional.empty());
+
+        assertThrows(BusinessRuleException.class, () -> despesaUseCase.filtrarDespesas(filtro));
+
+        verify(categoriaOutputPort, times(1)).buscarPorId(99L);
+    }
+
+    @Test
+    void deveFiltrarDespesasSemCategoria() {
+        filtro.setCategoriaId(null);
+
+        when(despesaOutputPort.filtrarDespesas(1L, null, null, null))
+                .thenReturn(List.of(despesa));
+
+        List<Despesa> resultado = despesaUseCase.filtrarDespesas(filtro);
+
+        assertEquals(1, resultado.size());
+        verify(despesaOutputPort, times(1)).filtrarDespesas(1L, null, null, null);
+    }
+
+    @Test
+    void deveFiltrarDespesasComCategoriaExistente() {
+        filtro.setCategoriaId(1L);
+        filtro.setDe(LocalDate.now().minusDays(5));
+        filtro.setAte(LocalDate.now());
+
+        when(categoriaOutputPort.buscarPorId(1L)).thenReturn(Optional.of(categoria));
+        when(despesaOutputPort.filtrarDespesas(1L, 1L, filtro.getDe(), filtro.getAte()))
+                .thenReturn(List.of(despesa));
+
+        List<Despesa> resultado = despesaUseCase.filtrarDespesas(filtro);
+
+        assertEquals(1, resultado.size());
+        verify(categoriaOutputPort, times(1)).buscarPorId(1L);
+        verify(despesaOutputPort, times(1)).filtrarDespesas(1L, 1L, filtro.getDe(), filtro.getAte());
     }
 }

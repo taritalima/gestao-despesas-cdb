@@ -1,12 +1,13 @@
 package br.com.cdb.controledespesas.adapter.input.controller;
 
+import br.com.cdb.controledespesas.adapter.input.documentation.DespesaDoc;
 import br.com.cdb.controledespesas.adapter.input.mapper.DespesaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.DespesaRequest;
 import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
 import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
 import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
 import br.com.cdb.controledespesas.core.domain.model.Despesa;
-import br.com.cdb.controledespesas.infraestructure.DespesaUseCaseBean;
+import br.com.cdb.controledespesas.port.input.DespesaInputPort;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Despesas", description = "Endpoints para controle de despesas pessoais")
 @RestController
 @RequestMapping("/despesas")
-public class DespesaController {
+public class DespesaController implements DespesaDoc {
 
-    private final DespesaUseCaseBean despesaUseCase;
+    private final DespesaInputPort despesaUseCase;
     private final  DespesaMapper despesaMapper;
 
-    public DespesaController(DespesaUseCaseBean despesaUseCase, DespesaMapper despesaMapper) {
+    public DespesaController(DespesaInputPort despesaUseCase, DespesaMapper despesaMapper) {
         this.despesaUseCase = despesaUseCase;
         this.despesaMapper = despesaMapper;
     }
@@ -38,6 +39,7 @@ public class DespesaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @GetMapping
     public ResponseEntity<SomaDespesasResponse> listarDespesasPorData(

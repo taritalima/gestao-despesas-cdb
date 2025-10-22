@@ -4,7 +4,8 @@ import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
 import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
-import br.com.cdb.controledespesas.infraestructure.CategoriaUseCaseBean;
+import br.com.cdb.controledespesas.factory.CategoriaFactory;
+import br.com.cdb.controledespesas.port.input.CategoriaInputPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +25,7 @@ class CategoriaControllerTest {
     private CategoriaMapper categoriaMapper;
 
     @Mock
-    private CategoriaUseCaseBean categoriaUseCase;
+    private CategoriaInputPort categoriaUseCase;
 
     @InjectMocks
     private CategoriaController categoriaController;
@@ -36,10 +37,10 @@ class CategoriaControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        categoria = new Categoria(1L, "Lanches");
-        categoriaRequest = new CategoriaRequest();
-        categoriaRequest.setNome("Lanches");
-        categoriaResponse = new CategoriaResponse(1L, "Lanches");
+
+        categoria = CategoriaFactory.createDefaultCategoria();
+        categoriaRequest = CategoriaFactory.createDefaultRequest();
+        categoriaResponse = CategoriaFactory.createDefaultResponse();
     }
 
     @Test

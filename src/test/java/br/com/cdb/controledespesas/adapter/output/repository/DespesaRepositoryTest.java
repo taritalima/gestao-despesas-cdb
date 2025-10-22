@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -142,5 +143,15 @@ class DespesaRepositoryTest {
         boolean result = despesaRepository.existsByUsuario(10L);
 
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void buscarPorIdEUsuario_deveRetornarVazioQuandoNaoEncontrar() {
+        when(jdbcTemplate.query(anyString(), any(RowMapper.class), anyLong(), anyLong()))
+                .thenReturn(List.of());
+
+        Optional<Despesa> resultado = despesaRepository.buscarPorIdEUsuario(1L, 1L);
+
+        assertTrue(resultado.isEmpty());
     }
 }

@@ -1,5 +1,6 @@
 package br.com.cdb.controledespesas.core.domain.usecase;
 
+import br.com.cdb.controledespesas.core.domain.decorator.UsuarioUseCaseLoggerDecorator;
 import br.com.cdb.controledespesas.core.domain.exception.BusinessRuleException;
 import br.com.cdb.controledespesas.core.domain.model.Usuario;
 import br.com.cdb.controledespesas.port.output.DespesaOutputPort;
@@ -66,7 +67,7 @@ class UsuarioUseCaseTest {
                 () -> usuarioUseCase.deletarUsuario(1L)
         );
 
-        assertEquals("Usuario não encontrada", exception.getMessage());
+        assertEquals("Usuario não encontrado", exception.getMessage());
         verify(usuarioOutputPort, never()).deletarUsuario(any());
     }
 
@@ -108,4 +109,6 @@ class UsuarioUseCaseTest {
         assertEquals("Usuário não encontrado com id: 1", exception.getMessage());
         verify(usuarioOutputPort, never()).alterarInfoUsuario(any());
     }
+
+
 }

@@ -57,4 +57,28 @@ class CategoriaMapperTest {
         assertThat(domain).isNotNull();
         assertThat(domain.getNome()).isEqualTo("Salgados");
     }
+
+    @Test
+    void deveRetornarNullQuandoRequestForNull() {
+        Categoria result = mapper.toDomain((CategoriaRequest) null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoEntityForNull() {
+        Categoria result = mapper.toDomain((CategoriaEntity) null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoDomainForNull() {
+        CategoriaEntity result = mapper.toEntity(null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoResponseForNull() {
+        CategoriaResponse result = mapper.toResponse(null);
+        assertThat(result).isNull();
+    }
 }

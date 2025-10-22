@@ -4,7 +4,7 @@ import br.com.cdb.controledespesas.adapter.input.mapper.UsuarioMapper;
 import br.com.cdb.controledespesas.adapter.input.request.UsuarioRequest;
 import br.com.cdb.controledespesas.adapter.input.response.UsuarioResponse;
 import br.com.cdb.controledespesas.core.domain.model.Usuario;
-import br.com.cdb.controledespesas.core.domain.usecase.UsuarioUseCase;
+import br.com.cdb.controledespesas.port.input.UsuarioInputPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ class UsuarioControllerTest {
     private UsuarioMapper usuarioMapper;
 
     @Mock
-    private UsuarioUseCase usuarioUseCase;
+    private UsuarioInputPort usuarioUseCase;
 
     @InjectMocks
     private UsuarioController usuarioController;

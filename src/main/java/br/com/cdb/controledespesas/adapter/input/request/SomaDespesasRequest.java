@@ -3,6 +3,7 @@ package br.com.cdb.controledespesas.adapter.input.request;
 import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -11,9 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SomaDespesasRequest {
 
     private BigDecimal totalGasto;
     private List<DespesaResponse> despesas;
+
 
 }

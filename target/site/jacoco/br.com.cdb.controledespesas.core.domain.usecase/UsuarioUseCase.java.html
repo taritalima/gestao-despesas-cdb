@@ -12,44 +12,36 @@ public class UsuarioUseCase implements UsuarioInputPort {
 
     private final UsuarioOutputPort usuarioOutputPort;
     private final DespesaOutputPort despesaOutputPort;
-<span class="fc" id="L15">    private static final Logger log = LoggerFactory.getLogger(UsuarioUseCase.class);</span>
 
-<span class="fc" id="L17">    public UsuarioUseCase(UsuarioOutputPort usuarioOutputPort, DespesaOutputPort despesaOutputPort) {</span>
-<span class="fc" id="L18">        this.usuarioOutputPort = usuarioOutputPort;</span>
-<span class="fc" id="L19">        this.despesaOutputPort = despesaOutputPort;</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L16">    public UsuarioUseCase(UsuarioOutputPort usuarioOutputPort, DespesaOutputPort despesaOutputPort) {</span>
+<span class="fc" id="L17">        this.usuarioOutputPort = usuarioOutputPort;</span>
+<span class="fc" id="L18">        this.despesaOutputPort = despesaOutputPort;</span>
+<span class="fc" id="L19">    }</span>
 
+
+    @Override
     public Usuario salvarUsuario(Usuario usuario){
-<span class="fc" id="L23">        Usuario salva = usuarioOutputPort.salvarUsuario(usuario);</span>
-<span class="fc" id="L24">        log.info(&quot;Usuario '{}' salva com sucesso&quot;, salva.getNome());</span>
-<span class="fc" id="L25">        return salva;</span>
+<span class="fc" id="L24">        return usuarioOutputPort.salvarUsuario(usuario);</span>
     }
 
-    public  void deletarUsuario(Long usuarioId){
-<span class="fc" id="L29">            Usuario usuario = usuarioOutputPort.buscarPorId(usuarioId)</span>
-<span class="fc" id="L30">                    .orElseThrow(() -&gt; {</span>
-<span class="fc" id="L31">                        log.warn(&quot;Usuario não encontrada com id: {}&quot;, usuarioId);</span>
-<span class="fc" id="L32">                        return new BusinessRuleException(&quot;Usuario não encontrada&quot;);</span>
-                    });
+    @Override
+    public void deletarUsuario(Long usuarioId){
+<span class="fc" id="L29">        Usuario usuario = usuarioOutputPort.buscarPorId(usuarioId)</span>
+<span class="fc" id="L30">                .orElseThrow(() -&gt; new BusinessRuleException(&quot;Usuario não encontrado&quot;));</span>
 
-<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (despesaOutputPort.existsByUsuario(usuario.getId())) {</span>
-<span class="fc" id="L36">                log.warn(&quot;Não é possível remover o usuario, existem despesas vinculadas do usuario: {}, com id {}&quot;, usuario.getNome(), usuario.getId());</span>
-<span class="fc" id="L37">                throw new BusinessRuleException(&quot;Não é possível remover o usuario, existem despesas vinculadas.&quot;);</span>
-            }
-<span class="fc" id="L39">            usuarioOutputPort.deletarUsuario(usuario.getId());</span>
-<span class="fc" id="L40">            log.info(&quot;Usuario deletada com sucesso: {} (id={})&quot;, usuario.getNome(), usuario.getId());</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (despesaOutputPort.existsByUsuario(usuario.getId())) {</span>
+<span class="fc" id="L33">            throw new BusinessRuleException(&quot;Não é possível remover o usuario, existem despesas vinculadas.&quot;);</span>
+        }
+<span class="fc" id="L35">        usuarioOutputPort.deletarUsuario(usuario.getId());</span>
+<span class="fc" id="L36">    }</span>
 
+    @Override
     public Usuario alterarInfoUsuario(Usuario usuario){
-<span class="fc" id="L44">       usuarioOutputPort.buscarPorId(usuario.getId())</span>
-<span class="fc" id="L45">               .orElseThrow(() -&gt; {</span>
-<span class="fc" id="L46">                   log.warn(&quot;Usuário não encontrado com id: {}&quot;, usuario.getId());</span>
-<span class="fc" id="L47">                   return new BusinessRuleException(&quot;Usuário não encontrado com id: &quot; + usuario.getId());</span>
-               });
-<span class="fc" id="L49">        Usuario usuarioAtualizado = usuarioOutputPort.alterarInfoUsuario(usuario);</span>
-<span class="fc" id="L50">        log.info(&quot;Usuario atualizado com sucesso: {} (id={})&quot;, usuarioAtualizado.getNome(), usuarioAtualizado.getId());</span>
-<span class="fc" id="L51">        return usuarioAtualizado;</span>
+<span class="fc" id="L40">        usuarioOutputPort.buscarPorId(usuario.getId())</span>
+<span class="fc" id="L41">                .orElseThrow(() -&gt; new BusinessRuleException(&quot;Usuário não encontrado com id: &quot; + usuario.getId()));</span>
 
+<span class="fc" id="L43">        return usuarioOutputPort.alterarInfoUsuario(usuario);</span>
     }
 }
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

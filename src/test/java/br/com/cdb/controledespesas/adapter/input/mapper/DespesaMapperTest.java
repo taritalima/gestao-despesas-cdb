@@ -83,5 +83,28 @@ class DespesaMapperTest {
         assertThat(entity.getUsuarioId()).isEqualTo(5L);
     }
 
+    @Test
+    void deveRetornarNullQuandoRequestForNull() {
+        Despesa result = mapper.toDomain((DespesaRequest) null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoEntityForNull() {
+        Despesa result = mapper.toDomain((DespesaEntity) null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoDomainForNull() {
+        DespesaEntity result = mapper.toEntity(null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void deveRetornarNullQuandoResponseForNull() {
+        DespesaResponse result = mapper.toResponse(null);
+        assertThat(result).isNull();
+    }
 
 }

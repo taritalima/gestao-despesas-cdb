@@ -1,11 +1,12 @@
 package br.com.cdb.controledespesas.adapter.input.controller;
 
 
+import br.com.cdb.controledespesas.adapter.input.documentation.CategoriaDoc;
 import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
 import br.com.cdb.controledespesas.adapter.input.request.CategoriaRequest;
 import br.com.cdb.controledespesas.adapter.input.response.CategoriaResponse;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
-import br.com.cdb.controledespesas.infraestructure.CategoriaUseCaseBean;
+import br.com.cdb.controledespesas.port.input.CategoriaInputPort;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,13 @@ import java.util.List;
 @Tag(name = "Categorias", description = "Endpoints para controle das Categorias")
 @RestController
 @RequestMapping("/categorias")
-public class CategoriaController {
+public class CategoriaController implements CategoriaDoc {
 
 
    private final CategoriaMapper  categoriaMapper;
-   private final CategoriaUseCaseBean categoriaUseCase;
+   private final CategoriaInputPort categoriaUseCase;
 
-    public CategoriaController( CategoriaMapper categoriaMapper, CategoriaUseCaseBean categoriaUseCase) {
+    public CategoriaController( CategoriaMapper categoriaMapper, CategoriaInputPort categoriaUseCase) {
         this.categoriaMapper = categoriaMapper;
         this.categoriaUseCase = categoriaUseCase;
     }

@@ -6,7 +6,7 @@ import br.com.cdb.controledespesas.adapter.input.request.FiltroDespesasRequest;
 import br.com.cdb.controledespesas.adapter.input.response.DespesaResponse;
 import br.com.cdb.controledespesas.adapter.input.response.SomaDespesasResponse;
 import br.com.cdb.controledespesas.core.domain.model.Despesa;
-import br.com.cdb.controledespesas.infraestructure.DespesaUseCaseBean;
+import br.com.cdb.controledespesas.port.input.DespesaInputPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,8 +25,7 @@ import static org.mockito.Mockito.*;
 class DespesaControllerTest {
 
     @Mock
-    private DespesaUseCaseBean despesaUseCase;
-
+    private DespesaInputPort despesaUseCase;
     @Mock
     private DespesaMapper despesaMapper;
 

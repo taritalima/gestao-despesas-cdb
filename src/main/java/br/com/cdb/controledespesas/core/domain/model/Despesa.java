@@ -27,6 +27,8 @@ public class Despesa {
         this.id = id;
     }
 
+
+
     public LocalDateTime getCriadoEm() {
         return criadoEm;
     }
