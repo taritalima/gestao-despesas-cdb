@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: br.com.cdb.controledespesas.config.DespesaUseCaseDecoratorTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.170 s -- in br.com.cdb.controledespesas.config.DespesaUseCaseDecoratorTest
