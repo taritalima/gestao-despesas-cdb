@@ -2,10 +2,8 @@ package br.com.cdb.controledespesas.adapter.output.repository;
 
 import br.com.cdb.controledespesas.adapter.input.mapper.CategoriaMapper;
 import br.com.cdb.controledespesas.adapter.output.entity.CategoriaEntity;
-import br.com.cdb.controledespesas.adapter.output.entity.DespesaEntity;
 import br.com.cdb.controledespesas.core.domain.model.Categoria;
 import br.com.cdb.controledespesas.port.output.CategoriaOutputPort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

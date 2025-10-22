@@ -12,43 +12,35 @@ public class UsuarioUseCase implements UsuarioInputPort {
 
     private final UsuarioOutputPort usuarioOutputPort;
     private final DespesaOutputPort despesaOutputPort;
-    private static final Logger log = LoggerFactory.getLogger(UsuarioUseCase.class);
 
     public UsuarioUseCase(UsuarioOutputPort usuarioOutputPort, DespesaOutputPort despesaOutputPort) {
         this.usuarioOutputPort = usuarioOutputPort;
         this.despesaOutputPort = despesaOutputPort;
     }
 
+
+    @Override
     public Usuario salvarUsuario(Usuario usuario){
-        Usuario salva = usuarioOutputPort.salvarUsuario(usuario);
-        log.info("Usuario '{}' salva com sucesso", salva.getNome());
-        return salva;
+        return usuarioOutputPort.salvarUsuario(usuario);
     }
 
-    public  void deletarUsuario(Long usuarioId){
-            Usuario usuario = usuarioOutputPort.buscarPorId(usuarioId)
-                    .orElseThrow(() -> {
-                        log.warn("Usuario não encontrada com id: {}", usuarioId);
-                        return new BusinessRuleException("Usuario não encontrada");
-                    });
+    @Override
+    public void deletarUsuario(Long usuarioId){
+        Usuario usuario = usuarioOutputPort.buscarPorId(usuarioId)
+                .orElseThrow(() -> new BusinessRuleException("Usuario não encontrado"));
 
-            if (despesaOutputPort.existsByUsuario(usuario.getId())) {
-                log.warn("Não é possível remover o usuario, existem despesas vinculadas do usuario: {}, com id {}", usuario.getNome(), usuario.getId());
-                throw new BusinessRuleException("Não é possível remover o usuario, existem despesas vinculadas.");
-            }
-            usuarioOutputPort.deletarUsuario(usuario.getId());
-            log.info("Usuario deletada com sucesso: {} (id={})", usuario.getNome(), usuario.getId());
+        if (despesaOutputPort.existsByUsuario(usuario.getId())) {
+            throw new BusinessRuleException("Não é possível remover o usuario, existem despesas vinculadas.");
+        }
+        usuarioOutputPort.deletarUsuario(usuario.getId());
     }
 
+    @Override
     public Usuario alterarInfoUsuario(Usuario usuario){
-       usuarioOutputPort.buscarPorId(usuario.getId())
-               .orElseThrow(() -> {
-                   log.warn("Usuário não encontrado com id: {}", usuario.getId());
-                   return new BusinessRuleException("Usuário não encontrado com id: " + usuario.getId());
-               });
-        Usuario usuarioAtualizado = usuarioOutputPort.alterarInfoUsuario(usuario);
-        log.info("Usuario atualizado com sucesso: {} (id={})", usuarioAtualizado.getNome(), usuarioAtualizado.getId());
-        return usuarioAtualizado;
+        usuarioOutputPort.buscarPorId(usuario.getId())
+                .orElseThrow(() -> new BusinessRuleException("Usuário não encontrado com id: " + usuario.getId()));
 
+        return usuarioOutputPort.alterarInfoUsuario(usuario);
     }
 }
+

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: br.com.cdb.controledespesas.ControleDespesasApplicationMainTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.09 s -- in br.com.cdb.controledespesas.ControleDespesasApplicationMainTest

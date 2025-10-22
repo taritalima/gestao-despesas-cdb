@@ -1,11 +1,13 @@
 package br.com.cdb.controledespesas.adapter.input.controller;
 
 
+import br.com.cdb.controledespesas.adapter.input.documentation.UsuarioDoc;
 import br.com.cdb.controledespesas.adapter.input.mapper.UsuarioMapper;
 import br.com.cdb.controledespesas.adapter.input.request.UsuarioRequest;
 import br.com.cdb.controledespesas.adapter.input.response.UsuarioResponse;
 import br.com.cdb.controledespesas.core.domain.model.Usuario;
-import br.com.cdb.controledespesas.core.domain.usecase.UsuarioUseCase;
+import br.com.cdb.controledespesas.port.input.UsuarioInputPort;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Usuarios")
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioDoc {
 
     private final UsuarioMapper usuarioMapper;
-    private final UsuarioUseCase usuarioUseCase;
+    private final UsuarioInputPort usuarioUseCase;
 
-    public UsuarioController(UsuarioMapper usuarioMapper, UsuarioUseCase usuarioUseCase) {
+    public UsuarioController(UsuarioMapper usuarioMapper, UsuarioInputPort usuarioUseCase) {
         this.usuarioMapper = usuarioMapper;
         this.usuarioUseCase = usuarioUseCase;
     }
